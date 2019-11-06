@@ -1,0 +1,2092 @@
+#+TITLE: 1.Building_Abstractions_with_Procedures
+
+* 1) Building Abstractions with Procedures
+# 逐步build up tower的模式.
+* Pre
+** Pre
+The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three:
+
+1. Combining several simple ideas into one compound one, *and thus* all complex ideas are made.
+2. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them =at once=, without uniting them into one, by which it gets all its ideas of relations.
+   # 此处只说了两个, recursive
+3. The third is separating them from all other ideas that accompany them in their real existence:
+#
+This is called abstraction, and thus all its general ideas are made.
+
+- John Locke, An Essay Concerning Human Understanding (1690)
+三个部分: Combine, Relate, Separate
+Combine, exert, compound, complex
+Relate(sort), bring together, at once, unit, relations
+Separate them from all other ideas
+and thus取代So, the second is
+
+鱼骨图的基本原理, 结构与可视化.
+并列关系,
+
+We are about to study the idea of a computational process. Computational processes are abstract beings that inhabit computers. As they evolve, processes manipulate other abstract things called data. The evolution of a process is directed by a pattern of rules called a program. People create programs to direct processes. In effect, we =conjure= the spirits of the computer with our spells.
+#+BEGIN_QUOTE
+Conjure /ˈkʌn.dʒɚ/ *召唤(念咒召唤)*,
+- Define:
+  to make (something) appear or seem to appear by using magic
+- Origin:
+  Middle English (also in the sense ‘oblige by oath’): from Old French conjurer ‘to plot or exorcize’, from Latin conjurare ‘band together by an oath, conspire’ (in medieval Latin ‘invoke’), from con- ‘together’ + jurare ‘swear’
+- 助记:
+  Conjure = invoke, con+oath, 咒语聚合起来.
+  We spell to conjure the spirit of computer.
+#+END_QUOTE
+A computational process is indeed much like a sorcerer's idea of a spirit{具象化}[fn:1].It cannot be seen or touched. It is not composed of matter at all.
+However, it is very real. It can perform intellectual work. It can answer questions. It can affect the world by disbursing money at a bank or by controlling a robot arm in a factory.
+The programs we use to conjure ~processes~ are like a sorcerer's spells.
+# So the spirit of computexr mentioned above is indeed "process"
+They are carefully composed from symbolic expressions in =arcane= and =esoteric= programming languages that *prescribe* the tasks we want our processes to perform.
+# prescribe, 妙, 程序便是预先写好的.
+#+BEGIN_QUOTE
+Arcane ɑːrˈkeɪn/  secret or mysterious.
+- Etymology:
+  from Latin arcanus, from arcere ‘to shut up’, from arca ‘chest’.
+  from arca "chest, box, place for safe-keeping," from PIE root *ark- "to hold, contain, guard",
+  ark=chest or box这一点讲得通, 因为ark是方舟,
+  Arcane就是将东西放进盒子里藏起来. 比如约柜.
+Esoteric /ˌes.əˈter.ɪk/ 内行才懂的
+- Define:
+  very unusual and understood or liked by only a small number of people, especially those with special knowledge:
+- Etymology:
+  1650s, from Greek esoterikos "belonging to an inner circle" (Lucian), from esotero "more within," comparative adverb of eso "within," from PIE *ens-o-, suffixed form of *ens, extended form of root *en "in." Classically applied to certain popular and non-technical writings of Aristotle, later to doctrines of Pythagoras. In English, first of Pythagorean doctrines.
+- 助记
+  e容易误解为ex,但却是相反的含义eso"within",root是en
+  只能生生记住."more within," "belonging to an inner circle"
+#+END_QUOTE
+
+A computational process, in a correctly working computer, executes programs precisely and accurately.
+Thus, like the sorcerer's apprentice, novice programmers must learn to understand and to *anticipate* the consequences of their conjuring.
+# 做两点:understand and anticipate,就是要与spirit沟通, 预测起行为.
+Even small errors (usually called bugs or glitches) in programs can have complex and unanticipated consequences.
+
+Fortunately, learning to program is considerably less dangerous than learning sorcery, because the spirits we deal with are conveniently contained in a secure way. Real-world programming, however, requires care, expertise, and wisdom. A small bug in a computer-aided design program, for example, can lead to the =catastrophic= collapse of an airplane or a dam or the self-destruction of an industrial robot.
+
+Master software engineers have the ability to organize programs so that they can be reasonably sure that the resulting processes will perform the tasks intended.
+They can ~visualize~ the behavior of their systems in advance.
+# visualize贯穿始终, 接下来的问题就是, 如何visualize?
+They know how to structure programs so that unanticipated problems do not lead to catastrophic consequences, and when problems do arise, they can debug their programs. Well-designed computational systems, like well-designed automobiles or nuclear reactors, are designed in a modular manner, so that the parts can be constructed, replaced, and debugged separately.
+
+** Programming in Lisp
+
+We need an appropriate language for describing processes, and we will use for this purpose the programming language Lisp. Just as our everyday thoughts are usually expressed in our natural language (such as English, French, or Japanese), and descriptions of quantitative phenomena are expressed with mathematical notations, our procedural thoughts will be expressed in Lisp. Lisp was invented in the late 1950s as a formalism for reasoning about the use of certain kinds of logical expressions, called recursion equations, as a model for computation. The language was conceived by John McCarthy and is based on his paper ``Recursive Functions of Symbolic Expressions and Their Computation by Machine'' (McCarthy 1960).
+
+Despite its =inception= as a mathematical formalism, Lisp is a practical programming language. A Lisp interpreter is a machine that carries out processes described in the Lisp language. The first Lisp interpreter was implemented by McCarthy with the help of colleagues and students in the Artificial Intelligence Group of the MIT Research Laboratory of Electronics and in the MIT Computation Center.
+Lisp, whose name is an acronym for LISt Processing,
+# 源头LISt Processing,
+was designed to provide symbol-manipulating capabilities for attacking programming problems such as the symbolic differentiation and integration of algebraic expressions. It included for this purpose new data objects known as atoms and lists, which most strikingly set it apart from all other languages of the period.
+
+Lisp was not the product of a =concerted= design effort. Instead, it evolved informally in an ~experimental~ manner in response to users' needs and to ~pragmatic~ implementation considerations.
+# lisp的特性experimental and pragmatic
+Lisp's informal evolution has continued through the years, and the community of Lisp users has traditionally resisted attempts to =promulgate= any ``official'' definition of the language. This evolution, together with the flexibility and elegance of the initial conception, has enabled Lisp, which is the second oldest language in widespread use today (only Fortran is older), to continually adapt to encompass the most modern ideas about program design. Thus, Lisp is by now a family of dialects, which, while sharing most of the original features, may differ from one another in significant ways. The dialect of Lisp used in this book is called Scheme.
+#+BEGIN_QUOTE
+Concerted, concern 协调的,商定的.
+- Define:
+  done in a planned and determined way, especially by more than one person, government, country, etc.
+#+END_QUOTE
+
+Because of its experimental character and its emphasis on symbol manipulation, Lisp was at first very *inefficient* for numerical computations, at least in comparison with Fortran. Over the years, however, Lisp compilers have been developed that translate programs into machine code that can perform numerical computations reasonably efficiently. And for special applications, Lisp has been used with great effectiveness.
+Although Lisp has not yet overcome its old reputation as =hopelessly inefficient= {笑场}, Lisp is now used in many applications ~where efficiency is not the central concern~.
+# 与之前思考的并无二致, 编辑器而言, 执行效率并非首要关注点.
+For example, Lisp has become a language of choice for 1) operating-system shell languages and for 2)extension languages for editors and 3)computer-aided design systems.
+
+If Lisp is not a mainstream language, why are we using it as the framework for our discussion of programming?
+# 提出关键问题. 为何选择非主流? 教学目的有那些优势?
+Because the language possesses unique features that make it an excellent medium for studying important programming constructs and data structures and for relating them to the =linguistic= features that support them.The most significant of these features is the fact that Lisp descriptions of processes, called procedures, can themselves be represented and manipulated as Lisp data. The importance of this is that there are powerful program-design techniques that rely on the ability to blur the traditional distinction between ``passive'' data and ``active'' processes. As we shall discover, Lisp's flexibility in handling procedures as data makes it one of the most convenient languages in existence for exploring these techniques. The ability to represent procedures as data also makes Lisp an excellent language for writing programs that must manipulate other programs as data, such as the interpreters and compilers that support computer languages.
+# 说了一大堆, program as data
+Above and beyond these considerations, programming in Lisp is great
+* 1.1 The Elements of Programming
+# blocks up采用3, 3, 2的结构.
+** Pre
+A powerful programming language is =more than= just a means for instructing a computer to perform tasks. The language also serves as a framework within which we organize our ideas about processes.
+# 一是执行任务, 而是用该语言思考.
+# organize our ideas about process, python这一点做得不好.
+Thus, when we describe a language, we should pay particular attention to the means that the language provides for combining simple ideas to form more complex ideas. Every powerful language has three mechanisms for accomplishing this:
+
+1. primitive expressions, which represent the simplest entities the language is concerned with,(小刺)
+2. means of combination, by which compound elements are built from simpler ones, and(中刺)
+3. means of abstraction, by which compound elements can be named and manipulated as units.(大刺)
+# 中间少了并列的部分, cases是并列的部分.
+# abstration概念中的三点. simple idea.
+# primitive, combine method and abstraction method.
+In programming, we deal with two kinds of elements:
+~procedures and data~. (Later we will discover that they are really not so distinct.)
+# 但是, 在我眼里是Control and Computation, CPU的两个Unit.比如binary search, 其中并无data, 而是分为Control与Compute.
+Informally, data is ``stuff'' that we want to manipulate, and procedures are descriptions of the rules for manipulating the data. Thus, any powerful programming language should be able to describe primitive data and primitive procedures and should have methods for combining and abstracting procedures and data.
+# primitive data and primitive procedure
+# 此处还有颇为重要的一点: 解决operator归类的问题.
+In this chapter we will deal only with simple numerical data so that we can focus on the rules for building procedures. In later chapters we will see that these same rules allow us to build procedures to manipulate compound data as well.
+
+** 1.1.1 Expressions
+
+One easy way to get started at programming is to examine some typical interactions with an interpreter for the Scheme dialect of Lisp. Imagine that you are sitting at a computer terminal. You type an expression, and the interpreter responds by displaying the result of its evaluating that expression.
+
+One kind of primitive expression you might type is a number. (More precisely, the expression that you type consists of the numerals that represent the number in base 10.) If you present Lisp with a number
+
+: 486
+
+the interpreter will respond by printing5
+
+: 486
+
+Expressions representing numbers may be combined with an expression representing a primitive procedure (such as + or *) to form a compound expression that represents the application of the procedure to those numbers. For example:
+
+: (+ 137 349)
+: 486
+: (- 1000 334)
+: 666
+: (* 5 99)
+: 495
+: (/ 10 5)
+: 2
+: (+ 2.7 10)
+: 12.7
+
+Expressions such as these, formed by delimiting a list of expressions within parentheses in order to denote procedure application, are called combinations. The leftmost element in the list is called the =operator=, and the other elements are called =operands==. The value of a combination is obtained by applying the procedure specified by the operator to the arguments that are the values of the operands.
+#+BEGIN_QUOTE
+操作符与操作数的英语,常常搞不清楚.
+一个是 opera + tor 操作符
+一个是 opera + nd d是digit, n是number.
+#+END_QUOTE
+
+The convention of placing the operator to the left of the operands is known as ~prefix notation~,
+# leetcodes算法练习中常见呀.
+and it may be somewhat confusing at first because it departs significantly from the customary mathematical convention. Prefix notation has several advantages, however. One of them is that it can accommodate procedures that may take an =arbitrary= number of arguments, as in the following examples:
+# 第一点是arbitrary, 词源是arbitor审判员.
+# rephrase
+#+begin_src emacs-lisp  :results output
+(+ 21 35 12 7)
+(* 25 4 12)
+#+end_src
+
+#+RESULTS:
+
+#+BEGIN_SRC python :session test :results output
+print('testing1')
+print('testing2')
+#+END_SRC
+
+#+RESULTS:
+: testing1
+: testing2
+
+
+=No ambiguity can arise=,
+# can arise用的好哇.
+because the operator is always the leftmost element and the entire combination is delimited by the parentheses.
+
+A second advantage of prefix notation is that it extends in a straightforward way to allow combinations to be nested, that is, to have combinations whose elements are themselves combinations:
+
+: (+ (* 3 5) (- 10 6))
+19
+
+There is no limit (in principle) to the depth of such nesting and to the overall complexity of the expressions that the Lisp interpreter can evaluate. It is we humans who get confused by still relatively simple expressions such as
+
+: (+ (* 3 (+ (* 2 4) (+ 3 5))) (+ (- 10 7) 6))
+
+which the interpreter would readily evaluate to be 57. We can help ourselves by writing such an expression in the form
+#+begin_src emacs-lisp :tangle yes
+(+ (* 3
+      (+ (* 2 4)
+         (+ 3 5)))
+   (+ (- 10 7)
+      6))
+#+end_src
+
+following a formatting convention known as *pretty-printing*, in which each long combination is written so that the operands are aligned vertically. The resulting indentations display clearly the structure of the expression.
+
+Even with complex expressions, the interpreter always operates in the same basic cycle: It reads an expression from the terminal, evaluates the expression, and prints the result. This mode of operation is often expressed by saying that the interpreter runs in a *read-eval-print loop*. Observe in particular that it is not necessary to explicitly instruct the interpreter to print the value of the expression.
+
+** 1.1.2 Naming and the Environment
+
+# 当教我的学生, recall这里用的圆周的案例.
+# 我用的是跨屏操作, 帮助记忆长串的数字.
+ A critical aspect of a programming language is the means it provides for using names to refer to computational objects. We say that the name identifies a variable whose value is the object.
+
+In the Scheme dialect of Lisp, we name things with define. Typing
+
+#+begin_src emacs-lisp :tangle yes :session sicp
+(defvar size 2)
+#+end_src
+
+#+RESULTS:
+: size
+
+causes the interpreter to associate the value 2 with the name size.8 Once the name size has been associated with the number 2, we can refer to the value 2 by name:
+
+#+begin_src emacs-lisp :tangle yes :session sicp
+(* 5 size)
+#+end_src
+
+#+RESULTS:
+: 10
+
+
+
+Here are further examples of the use of define:
+
+#+begin_src emacs-lisp :tangle yes :session sicp
+(defvar pi 3.14159)
+(defvar radius 10)
+;;(* pi (* radius radius))
+;314.159
+(defvar circumference (* 2 pi radius))
+circumference
+; 62.8318
+#+end_src
+
+#+RESULTS:
+: 62.83185307179586
+
+
+
+Define is our language's simplest means of abstraction,
+# 此处点出来, fuction是abstraction, 注意后面的分析.
+for it allows us to use simple names to refer to the results of compound operations, such as the circumference computed above.
+# 整个body体是compound operations
+In general, computational objects may have very complex structures, and it would be extremely inconvenient to have to remember and repeat their details each time we want to use them. Indeed, complex programs are constructed by building, step by step, computational objects of increasing complexity. The interpreter makes this step-by-step program construction particularly convenient because name-object associations can be created incrementally in successive interactions. This feature encourages the incremental development and testing of programs and is largely responsible for the fact that a Lisp program usually consists of a large number of relatively simple procedures.
+
+It should be clear that the possibility of associating values with symbols and later retrieving them means that the interpreter must maintain some sort of memory that keeps track of the =name-object= pairs.
+# symblic tables
+ This memory is called the environment (more precisely the global environment, since we will see later that a computation may involve a number of different environments).
+# 妙哉,对environment的定义再清晰不过.python的教程中只有environment的外在表现:scope
+
+** 1.1.3 Evaluating Combinations
+# 这里很重要, evaluate的是tree结构.从最根本处就是tree.按照level逐层damping.
+One of our goals in this chapter is to ~isolate~ issues about thinking procedurally.
+# 与abstration的概念相互性, isolate涉及到了第三点.
+As a case in point, let us consider that, in evaluating combinations, the interpreter is itself following a procedure.
+
+    To evaluate a combination, do the following:
+
+    1. Evaluate the subexpressions of the combination.
+    2. Apply the procedure that is the value of the leftmost subexpression (the
+       operator) to the arguments that are the values of the other
+       subexpressions (the operands).
+# apply就是用这些方法来处理数据.
+# 而object-oriented的模式,是将数据输入到procedure中处理.
+
+Even this simple rule illustrates some important points about processes in general. First, observe that the first step dictates that in order to accomplish the evaluation process for a combination we must first perform the evaluation process on each element of the combination. Thus, the evaluation rule is recursive in nature; that is, it includes, as one of its steps, the need to invoke the rule itself.{#就是后面的recursion#}
+
+Notice how succinctly the idea of recursion can be used to express what, in the case of a deeply nested combination, would otherwise be viewed as a rather complicated process. For example, evaluating
+# complcated to succinct.
+
+: (* (+ 2 (* 4 6))
+:  (+ 3 5 7))
+# 对nested的解析.
+
+requires that the evaluation rule be applied to four different combinations. We can obtain a picture of this process by representing the combination in the form of a tree, as shown in figure 1.1. Each combination is represented by a node with branches corresponding to the operator and the operands of the combination stemming from it. The terminal nodes (that is, nodes with no branches stemming from them) represent either operators or numbers. Viewing evaluation in terms of the tree, we can imagine that the values of the operands percolate upward, starting from the terminal nodes and then combining at higher and higher levels. In general, we shall see that recursion is a very powerful technique for dealing with hierarchical, treelike objects. In fact, the "" =percolate= values upward'' form of the evaluation rule is an example of a general kind of process known as =tree accumulation=.
+#+BEGIN_QUOTE
+Percolate /ˈpɝː.kəl.eɪt/ 渗透
+- Define:
+  to pass slowly through something that has many small holes in it.
+- Etymology
+  1620s, a back-formation from percolation, or else from Latin percolatus, past participle of percolare "to strain through." Figurative sense by 1670s. Related: Percolated; percolating.
+  early 17th cent.: from Latin percolat- ‘strained through’, from the verb percolare, from per- ‘through’ + colare ‘to strain’ (from colum ‘strainer’).
+ - 助记
+   strain有"拉紧", 过滤的含义
+#+END_QUOTE
+
+# 首次介绍Tree结构.
+#+BEGIN_SRC elisp
+(* (+ 2 (* 4 6))
+   (+ 3 5 7))
+#+END_SRC
+
+#+RESULTS:
+: 390
+
+[[../images/algorithms.org_20190716_144517.png]]
+
+与python进行对比
+#+ATTR_HTML: :width 500px
+[[../images/algorithms.org_20190718_091239.png]]
+
+
+
+1. the values of numerals are the numbers that they name,
+2. the values of built-in operators are the machine instruction sequences that carry out the corresponding operations, and
+3. the values of other names are the objects associated with those names in the environment.
+# operator是machine instruction, 这点很有意思.
+Notice that the evaluation rule given above does not handle definitions. For instance, evaluating (define x 3) does not apply define to two arguments, one of which is the value of the symbol x and the other of which is 3, since the purpose of the define is precisely to associate x with a value. (That is, (define x 3) is not a combination.)
+# 总算命名了, function处理多个arguments称之为combination.
+
+** 1.1.4 Compound Procedures
+# 引入function的概念. ffunction是compounded procedures.
+We have identified in Lisp some of the elements that must appear in any powerful programming language:
+
+1. Numbers and arithmetic operations are primitive data and procedures.
+   # arithmetic opeartions是procedures,
+   # 不如Control与计算的划分.
+2. Nesting of combinations provides a means of combining operations.
+3. Definitions that associate names with values provide a limited means of abstraction.
+   # 有意思, variable是limited abstration
+   # 抽象的应用无处不自呢.
+
+Now we will learn about procedure definitions, a much more powerful abstraction technique by which a compound operation can be given a name and then referred to as a unit.
+
+We begin by examining how to express the idea of ``squaring.'' We might say, ``To square something, multiply it by itself.'' This is expressed in our language as
+g
+#+begin_src emacs-lisp :tangle yes :session sicp
+(defun square (x) (* x x))
+(square 5)
+#+end_src
+
+#+RESULTS:
+: 25
+
+We can understand this in the following way:
+[[../images/SICP.org_20191026_012217.png]]
+
+We have here a compound procedure, which has been given the name square. The procedure represents the operation of multiplying something by itself. The thing to be multiplied is given a local name, x, which plays the same role that a =pronoun= plays in natural language. Evaluating the definition creates this compound procedure and associates it with the name square.
+# pronoun用的好, 类比清晰. pro是in place of.
+The general form of a procedure definition is
+
+: (define (<name> <formal parameters>) <body>)
+# 此处(为invoke, conjure的含义
+# 所以在bash,python等语言内置了invoke, 怪不得我总是会觉得少了点什么.
+
+The <name> is a symbol to be associated with the procedure definition in the environment. The <formal parameters> are the names used within the body of the procedure to refer to the corresponding arguments of the procedure. The <body> is an expression that will yield the value of the procedure application when the formal parameters are replaced by the actual arguments to which the procedure is applied.14 The <name> and the <formal parameters> are grouped within parentheses, just as they would be in an actual call to the procedure being defined.
+
+Having defined square, we can now use it:
+
+
+#+begin_src emacs-lisp :session sicp :results output
+(print (square 21))
+(print (square (+ 2 5)))
+#+end_src
+
+#+RESULTS:
+: 441
+: 49
+
+We can also use square as a building block in defining other procedures. For example, x2 + y2 can be expressed as
+
+: (+ (square x)  (square y))
+
+We can easily define a procedure sum-of-squares that, given any two numbers as arguments, produces the sum of their squares:
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun sum-of-squares (x y)
+  (+ (square x) (square y)))
+
+(print (sum-of-squares 3 4))
+#+end_src
+
+#+RESULTS:
+:
+: 25
+
+Now we can use sum-of-squares as a building block in constructing further procedures:
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun f(a)
+  (sum-of-squares (+ a 1) (* a 2)))
+
+(print (f 5))
+#+end_src
+
+#+RESULTS:
+:
+: 136
+
+Compound procedures are used in exactly the same way as primitive procedures. Indeed, one could not tell by looking at the definition of sum-of-squares given above whether square was built into the interpreter, like + and *, or defined as a compound procedure.
+
+** 1.1.5 The Substitution Model for Procedure Application
+这个说法好无聊.
+
+To evaluate a combination whose operator names a compound procedure, the interpreter follows much the same process as for combinations whose operators name primitive procedures, which we described in section 1.1.3. That is, the interpreter evaluates the elements of the combination and applies the procedure (which is the value of the operator of the combination) to the arguments (which are the values of the operands of the combination).
+
+We can assume that the mechanism for applying primitive procedures to arguments is built into the interpreter. For compound procedures, the application process is as follows:
+
+    To apply a compound procedure to arguments, evaluate the body of the procedure with each formal parameter replaced by the corresponding argument.
+
+To illustrate this process, let's evaluate the combination
+
+: (f 5)
+
+where f is the procedure defined in section 1.1.4. We begin by retrieving the body of f:
+
+: (sum-of-squares (+ a 1) (* a 2))
+
+Then we replace the formal parameter a by the argument 5:
+
+: (sum-of-squares (+ 5 1) (* 5 2))
+
+Thus the problem reduces to the evaluation of a combination with two operands and an operator sum-of-squares.
+# substitute的含义在此处.
+Evaluating this combination involves three subproblems. We must evaluate the operator to get the procedure to be applied, and we must evaluate the operands to get the arguments. Now (+ 5 1) produces 6 and (* 5 2) produces 10, so we must apply the sum-of-squares procedure to 6 and 10. These values are substituted for the formal parameters x and y in the body of sum-of-squares, reducing the expression to
+
+: (+ (square 6) (square 10))
+
+If we use the definition of square, this reduces to
+
+: (+ (* 6 6) (* 10 10))
+
+which reduces by multiplication to
+
+: (+ 36 100)
+
+and finally to
+
+: 136
+
+The process we have just described is called the substitution model for procedure application. It can be taken as a model that determines the ``meaning'' of procedure application, insofar as the procedures in this chapter are concerned. However, there are two points that should =be stressed=:
+# 学习新的词汇stress
+
+    1. The purpose of the substitution is to help us think about procedure application, not to provide a description of how the interpreter really works. Typical interpreters do not evaluate procedure applications by manipulating the text of a procedure to substitute values for the formal parameters. In practice, the ``substitution'' is accomplished by using a local environment for the formal parameters. We will discuss this more fully in chapters 3 and 4 when we examine the implementation of an interpreter in detail.
+
+    2. Over the course of this book, we will present a sequence of increasingly elaborate models of how interpreters work, culminating with a complete implementation of an interpreter and compiler in chapter 5. The substitution model is only the first of these models -- a way to get started thinking formally about the evaluation process. In general, when modeling phenomena in science and engineering, we begin with simplified, incomplete models. As we examine things in greater detail, these simple models become inadequate and must be replaced by more refined models. The substitution model is no exception. In particular, when we address in chapter 3 the use of procedures with ``mutable data,'' we will see that the substitution model breaks down and must be replaced by a more complicated model of procedure application.
+
+*** Applicative order versus normal order
+
+According to the description of evaluation given in section 1.1.3, the interpreter first evaluates the operator and operands and then applies the resulting procedure to the resulting arguments. This is not the only way to perform evaluation. An alternative evaluation model would not evaluate the operands until their values were needed. Instead it would first substitute operand expressions for parameters until it obtained an expression involving only primitive operators, and would then perform the  evaluation. If we used this method, the evaluation of
+
+: (f 5)
+: would proceed according to the sequence of expansions
+:
+: (sum-of-squares (+ 5 1) (* 5 2))
+:
+: (+    (square (+ 5 1))      (square (* 5 2))  )
+:
+: (+    (* (+ 5 1) (+ 5 1))   (* (* 5 2) (* 5 2)))
+:
+: followed by the reductions
+:
+: (+         (* 6 6)             (* 10 10))
+:
+: (+           36                   100)
+:
+:                     136
+
+This gives the same answer as our previous evaluation model, but the process is different. In particular, the evaluations of (+ 5 1) and (* 5 2) are each performed twice here, corresponding to the reduction of the expression
+# 涉及到efficiency的问题.
+
+: (* x x)
+
+with x replaced respectively by (+ 5 1) and (* 5 2).
+
+This alternative *``fully expand and then reduce''* evaluation method is known as normal-order evaluation, in contrast to the ``evaluate the arguments and then apply'' method that the interpreter actually uses, which is called applicative-order evaluation. It can be shown that, for procedure applications that can be modeled using substitution (including all the procedures in the first two chapters of this book) and that yield legitimate values, normal-order and applicative-order evaluation produce the same value. (See exercise 1.5 for an instance of an ``illegitimate'' value where normal-order and applicative-order evaluation do not give the same result.)
+# Two methods: 1) expand and reduce 2) evaluate and apply
+Lisp uses applicative-order evaluation, partly because of the additional efficiency obtained from avoiding multiple evaluations of expressions such as those illustrated with (+ 5 1) and (* 5 2) above and, more significantly, because normal-order evaluation becomes much more complicated to deal with when we leave the realm of procedures that can be modeled by substitution.
+=On the other hand=,
+# 这样的说法, 我都要忘记了
+normal-order evaluation can be an extremely valuable tool, and we will investigate some of its implications in chapters 3 and 4.16
+
+** 1.1.6 Conditional Expressions and Predicates
+# 用的abs的案例.
+The expressive power of the class of procedures that we can define at this point is very limited, because we have no way to make tests and to perform different operations depending on the result of a test. For instance, we cannot define a procedure that computes the absolute value of a number by testing whether the number is positive, negative, or zero and taking different actions in the different cases according to the rule
+
+
+This construct is called a case =analysis=,
+# case analysis,分析这个单词用得棒.condition, branch,现在有了第三个词汇analysis, 当然还有一个说法是test,从条件里加一个动词 and case, case的优先级最高.
+and there is a special form in Lisp for notating such a case analysi s. It is called cond (which stands for ``conditional''), and it is used as follows:
+
+: (defun (abs x)
+:  (cond ((> x 0) x)
+:        ((= x 0) 0)
+:        ((< x 0) (- x))))
+
+The general form of a conditional expression is
+
+: (cond (<p1> <e1>)
+:       (<p2> <e2>)
+:       (<pn> <en>))
+
+consisting of the symbol cond followed by parenthesized pairs of expressions (<p> <e>) called clauses. The first expression in each pair is a =predicate= -- that is, an expression whose value is interpreted as either true or false.
+# 后面的种种p, 是从这里来的. predicate
+
+Conditional expressions are evaluated as follows. The predicate <p1> is evaluated first. If its value is false, then <p2> is evaluated. If <p2>'s value is also false, then <p3> is evaluated. This process continues until a predicate is found whose value is true, in which case the interpreter returns the value of the corresponding =consequent= expression <e> of the clause as the value of the conditional expression. If none of the <p>'s is found to be true, the value of the cond is undefined.
+# 日后便用predicate这个词汇.比judgemen好.
+
+The word predicate is used for procedures that return true or false, as well as for expressions that evaluate to true or false. The absolute-value procedure abs makes use of the primitive predicates >, <, and =. These take two numbers as arguments and test whether the first number is, respectively, greater than, less than, or equal to the second number, returning true or false accordingly.
+
+Another way to write the absolute-value procedure is
+
+: (define (abs x)
+:   (cond ((< x 0) (- x))
+:         (else x)))
+
+# 新的习惯, 整体是case, 结果是predicate
+which could be expressed in English as ``If x is less than zero return - x; otherwise return x.'' Else is a special symbol that can be used in place of the <p> in the final clause of a cond. This causes the cond to return as its value the value of the corresponding <e> whenever all previous clauses have been bypassed. In fact, any expression that always evaluates to a true value could be used as the <p> here.
+
+Here is yet another way to write the absolute-value procedure:
+
+: (define (abs x)
+:   (if (< x 0)
+:       (- x)
+:       x))
+
+This uses the special form if, a restricted type of conditional that can be used when there are precisely two cases in the case analysis. The general form of an if expression is
+
+: (if <predicate> <consequent> <alternative>)
+
+To evaluate an if expression, the interpreter starts by evaluating the <predicate> part of the expression. If the <predicate> evaluates to a true value, the interpreter then evaluates the <consequent> and returns its value. Otherwise it evaluates the <alternative> and returns its value.
+
+In addition to primitive predicates such as <, =, and >, there are logical composition operations, which enable us to construct compound predicates. The three most frequently used are these:
+
+    : (and <e1> ... <en>)
+
+    The interpreter evaluates the expressions <e> one at a time, in left-to-right order. If any <e> evaluates to false, the value of the and expression is false, and the rest of the <e>'s are not evaluated. If all <e>'s evaluate to true values, the value of the and expression is the value of the last one.
+
+    : (or <e1> ... <en>)
+
+    The interpreter evaluates the expressions <e> one at a time, in left-to-right order. If any <e> evaluates to a true value, that value is returned as the value of the or expression, and the rest of the <e>'s are not evaluated. If all <e>'s evaluate to false, the value of the or expression is false.
+
+    : (not <e>)
+
+    The value of a not expression is true when the expression <e> evaluates to false, and false otherwise.
+
+Notice that and and or are special forms, not procedures, because the subexpressions are not necessarily all evaluated. Not is an ordinary procedure.
+
+As an example of how these are used, the condition that a number x be in the range 5 < x < 10 may be expressed as
+
+: (and (> x 5) (< x 10))
+
+As another example, we can define a predicate to test whether one number is greater than or equal to another as
+
+: (define (>= x y)
+:   (or (> x y) (= x y)))
+
+or alternatively as
+
+: (define (>= x y)
+:   (not (< x y)))
+
+Exercise 1.1.  Below is a sequence of expressions. What is the result printed by the interpreter in response to each expression? Assume that the sequence is to be evaluated in the order in which it is presented.
+
+: 10
+: (+ 5 3 4)
+: (- 9 1)
+: (/ 6 2)
+: (+ (* 2 4) (- 4 6))
+: (define a 3)
+: (define b (+ a 1))
+: (+ a b (* a b))
+: (= a b)
+: (if (and (> b a) (< b (* a b)))
+:     b
+:     a)
+: (cond ((= a 4) 6)
+:       ((= b 4) (+ 6 7 a))
+:       (else 25))
+: (+ 2 (if (> b a) b a))
+: (* (cond ((> a b) a)
+:          ((< a b) b)
+:          (else -1))
+:    (+ a 1))
+
+Exercise 1.2.  Translate the following expression into prefix form
+[[../images/Books.SICP.org_20191026_164332.png]]
+
+Exercise 1.3.  Define a procedure that takes three numbers as arguments and returns the sum of the squares of the two larger numbers.
+
+Exercise 1.4.  Observe that our model of evaluation allows for combinations whose operators are compound expressions. Use this observation to describe the behavior of the following procedure:
+
+: (define (a-plus-abs-b a b)
+:   ((if (> b 0) + -) a b))
+
+Exercise 1.5.  Ben Bitdiddle has invented a test to determine whether the interpreter he is faced with is using applicative-order evaluation or normal-order evaluation. He defines the following two procedures:
+
+: (define (p) (p))
+:
+: (define (test x y)
+:   (if (= x 0)
+:       0
+:       y))
+
+Then he evaluates the expression
+
+: (test 0 (p))
+
+What behavior will Ben observe with an interpreter that uses applicative-order evaluation? What behavior will he observe with an interpreter that uses normal-order evaluation? Explain your answer. (Assume that the evaluation rule for the special form if is the same whether the interpreter is using normal or applicative order: The predicate expression is evaluated first, and the result determines whether to evaluate the consequent or the alternative expression.)
+
+: (defun (abs x)
+:   (cond ((> x 0) x)
+:         ((= x 0) 0)
+:         ((< x 0) (- x))))
+:
+The general form of a conditional expression is
+
+: (cond (<p1> <e1>)
+:       (<p2> <e2>)
+:
+:       (<pn> <en>))
+
+#+BEGIN_COMMENT
+总结: 使用condition, predicate and consequence
+#+END_COMMENT
+
+** 1.1.7 Example: Square Roots by Newton's Method
+
+Procedures, as introduced above, are much like ordinary mathematical functions.
+# 考虑是否用procedure这个单词替换function.
+They specify a value that is determined by one or more parameters. But there is an important difference between mathematical functions and computer procedures. Procedures must be effective.
+
+As a case in point, consider the problem of computing square roots. We can define the square-root function as
+[[../images/Books.SICP.org_20191026_165804.png]]
+
+This describes a perfectly legitimate mathematical function. We could use it to recognize whether one number is the square root of another, or to derive facts about square roots in general. On the other hand, the definition does not describe a procedure. Indeed, it tells us almost nothing about how to actually find the square root of a given number. It will not help matters to rephrase this definition in pseudo-Lisp:
+
+: (define (sqrt x)
+:   (the y (and (>= y 0)
+:               (= (square y) x))))
+
+This only begs the question.
+
+The contrast between function and procedure is a reflection of the general distinction between describing properties of things and describing how to do things, or, as it is sometimes referred to, the distinction between ~declarative~ knowledge and ~imperative~ knowledge. In mathematics we are usually concerned with declarative (what is) descriptions, whereas in computer science we are usually concerned with imperative (how to) descriptions.
+# declarative与imperative最早从MIT Python中见到.
+How does one compute square roots? The most common way is to use Newton's method of "successive approximations", which says that whenever we have a guess y for the value of the square root of a number x, we can perform a simple manipulation to get a better guess (one closer to the actual square root) by averaging y with x/y. For example, we can compute the square root of 2 as follows. Suppose our initial guess is 1:
+
+|  Guess | Quotient            | Average                        |
+|--------+---------------------+--------------------------------+
+|      1 | (2/1) = 2           | ((2 + 1)/2) = 1.5              |
+|--------+---------------------+--------------------------------+
+|    1.5 | (2/1.5) = 1.3333    | ((1.3333 + 1.5)/2) = 1.4167    |
+|--------+---------------------+--------------------------------+
+| 1.4167 | (2/1.4167) = 1.4118 | ((1.4167 + 1.4118)/2) = 1.4142 |
+|--------+---------------------+--------------------------------+
+| 1.4142 | ...                 | ...                            |
+# 没有比较大小的步骤, 以x/guess控制方向.
+# quotient是how many
+# 区别之处在于将quotient也概念化了.
+Continuing this process, we obtain better and better approximations to the square root.
+
+Now let's formalize the process in terms of procedures. We start with a value for the ~radicand~ (the number whose square root we are trying to compute) and a value for the guess. If the guess is ~good enough~ for our purposes, we are done; if not, we must repeat the process with an improved guess. We write this basic strategy as a procedure:
+# 此处的good enough解释了为什么MIT会使用这样的解法. 就是核实是否good enough.
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun sqrt-iter(guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+;; 所有的args同时取出来.
+#+end_src
+# 搞清楚什么时候用iter, 什么时候可以什么都不用.
+
+
+A guess is improved by averaging it with the quotient of the urn radicand and the old guess:
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun improve(guess x)
+  (average guess (/ x guess)))
+
+(defun (average x y)
+  (/ (+ x y) 2))
+#+end_src
+
+We also have to say what we mean by ``good enough.'' The following will do for illustration, but it is not really a very good test. (See exercise 1.7.) The idea is to improve the answer until it is close enough so that its square differs from the radicand by less than a predetermined tolerance (here 0.001):22
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+#+end_src
+
+Finally, we need a way to get started. For instance, we can always guess that the square root of any number is 1
+
+: (defun (sqrt x)
+:   (sqrt-iter 1.0 x))
+# 全部写到一起
+#+begin_src emacs-lisp :session sicp :results output
+;; 按照isolate的原则.
+(defun (sqrt x)
+  (sqrt-iter 1.0 x)) ;;因为需要两个变量, 所以需要重新构造.
+
+(defun sqrt-iter(guess x)
+  (if (good-enough? guess x)
+      guess
+      (sqrt-iter (improve guess x)
+                 x)))
+
+(defun (good-enough? guess x)
+  (< (abs (- (square guess) x)) 0.001))
+
+(defun improve(guess x)
+  (average guess (/ x guess)))
+
+(defun (average x y)
+  (/ (+ x y) 2))
+;; 这种逐层向上的block up模式
+;;极端化的案例
+#+end_src
+
+If we type these definitions to the interpreter, we can use sqrt just as we can use any procedure:
+
+: (sqrt 9)
+: 3.00009155413138
+: (sqrt (+ 100 37))
+: 11.704699917758145
+: (sqrt (+ (sqrt 2) (sqrt 3)))
+: 1.7739279023207892
+: (square (sqrt 1000))
+: 1000.000369924366
+
+The sqrt program also illustrates that the simple procedural language we have introduced so far is sufficient for writing any purely numerical program that one could write in, say, C or Pascal. This might seem surprising, since we have not included in our language any iterative (looping) constructs that direct the computer to do something over and over again.
+# 有意思, 仅仅通过procedure实现recursion. 最先引入的是recursion而非iteration.
+Sqrt-iter, on the other hand, demonstrates how ~iteration~ can be accomplished using no special construct other than the ordinary ability to call a procedure.
+# while也是iteration, 数值是步进的.
+
+Exercise 1.6.  Alyssa P. Hacker doesn't see why if needs to be provided as a special form. ``Why can't I just define it as an ordinary procedure in terms of cond?'' she asks. Alyssa's friend Eva Lu Ator claims this can indeed be done, and she defines a new version of if:
+
+: (defun (new-if predicate then-clause else-clause)
+:   (cond (predicate then-clause)
+:         (else else-clause)))
+
+Eva demonstrates the program for Alyssa:
+
+: (new-if (= 2 3) 0 5)
+5
+
+: (new-if (= 1 1) 0 5)
+0
+
+Delighted, Alyssa uses new-if to rewrite the square-root program:
+
+: (defun (sqrt-iter guess x)
+:   (new-if (good-enough? guess x)
+:           guess
+:           (sqrt-iter (improve guess x)
+:                      x)))
+
+What happens when Alyssa attempts to use this to compute square roots? Explain.
+
+Exercise 1.7.  The good-enough? test used in computing square roots will not be very effective for finding the square roots of very small numbers. Also, in real computers, arithmetic operations are almost always performed with *limited precision*. This makes our test inadequate for very large numbers. Explain these statements, with examples showing how the test fails for small and large numbers. An alternative strategy for implementing good-enough? is to watch how guess changes from one iteration to the next and to stop when the change is a very small fraction of the guess. Design a square-root procedure that uses this kind of end test. Does this work better for small and large numbers?
+
+Exercise 1.8.  Newton's method for cube roots is based on the fact that if y is an approximation to the cube root of x, then a better approximation is given by the value
+
+Use this formula to implement a cube-root procedure analogous to the square-root procedure. (In section 1.3.4 we will see how to implement Newton's method in general as an abstraction of these square-root and cube-root procedures.)
+
+** 1.1.8 Procedures as Black-Box Abstractions
+*** Decomposition and Black-Box
+
+Sqrt is our first example of a process defined by a set of mutually defined procedures. Notice that the definition of sqrt-iter is recursive; that is, the procedure is defined in terms of itself. The idea of being able to define a procedure in terms of itself may be disturbing; it may seem unclear how such a ''circular'' definition could make sense at all, much less specify a well-defined process to be carried out by a computer. This will be addressed more carefully in section 1.2. But first let's consider some other important points illustrated by the sqrt example.
+
+Observe that the problem of computing square roots breaks up naturally into a number of subproblems:
+1. how to tell whether a guess is good enough,
+2. how to improve a guess, and so on.
+Each of these tasks is accomplished by a separate procedure. The entire sqrt program can be viewed as a =cluster= of procedures (shown in figure 1.2) that =mirrors= the decomposition{解构} of the problem into subproblems.
+# cluster,mirror用得好, 学习到.
+
+Figure 1.2:  Procedural decomposition of the sqrt program.
+[[../images/Books.SICP.org_20191026_193710.png]]
+
+The importance of this decomposition strategy is not simply that one is dividing the program into parts. After all, we could take any large program and divide it into parts -- the first ten lines, the next ten lines, the next ten lines, and so on.
+# 论证通俗
+Rather, it is crucial that each procedure accomplishes an identifiable task that can be used as a module in defining other procedures. For example, when we define the good-enough? procedure in terms of square, we are able to regard the square procedure as a ``black box.'' We are not at that moment concerned with how the procedure computes its result, only with the fact that it computes the square. The details of how the square is computed can be suppressed, to be considered at a later time. Indeed, as far as the good-enough? procedure is concerned, square is not quite a procedure but rather an abstraction of a procedure, a so-called *procedural abstraction*.
+# procedural abstration, suppress
+At this level of abstraction, any procedure that computes the square is equally good.
+
+Thus, considering only the values they return, the following two procedures for squaring a number should be indistinguishable. Each takes a numerical argument and produces the square of that number as the value.25
+
+: (define (square x) (* x x))
+: (define (square x)
+:   (exp (double (log x))))
+: (define (double x) (+ x x))
+
+So a procedure definition should be able to suppress detail. The users of the procedure may not have written the procedure themselves, but may have obtained it from another programmer as a black box. A user should not need to know how the procedure is implemented in order to use it.
+
+*** Local names
+
+One detail of a procedure's implementation that should not matter to the user of the procedure is the implementer's choice of names for the procedure's formal parameters. Thus, the following procedures should not be distinguishable:
+
+: (define (square x) (* x x))
+: (define (square y) (* y y))
+
+This principle -- that the meaning of a procedure should be independent of the parameter names used by its author -- seems on the surface to be self-evident, but its consequences are =profound=. The simplest consequence is that the parameter names of a procedure must be local to the body of the procedure. For example, we used square in the definition of good-enough? in our square-root procedure:
+
+: (define (good-enough? guess x)
+:   (< (abs (- (square guess) x)) 0.001))
+
+The intention of the author of good-enough? is to determine if the square of the first argument is within a given =tolerance= {#C-f的感觉很棒#}of the second argument. We see that the author of good-enough? used the name guess to refer to the first argument and x to refer to the second argument. The argument of square is guess. If the author of square used x (as above) to refer to that argument, we see that the x in good-enough? must be a different x than the one in square. Running the procedure square must not affect the value of x that is used by good-enough?, because that value of x may be needed by good-enough? after square is done computing.
+# 这里将简单的概念讲得特别晦涩难懂.
+
+If the parameters were not local to the bodies of their respective procedures, then the parameter x in square could be confused with the parameter x in good-enough?, and the behavior of good-enough? would depend upon which version of square we used. Thus, square would not be the black box we desired.
+
+A formal parameter of a procedure has a very special role in the procedure definition, in that it doesn't matter what name the formal parameter has. Such a name is called a bound variable, and we say that the procedure definition binds its formal parameters. The meaning of a procedure definition is unchanged if a bound variable is consistently renamed throughout the definition. If a variable is not bound, we say that it is free. The set of expressions for which a binding defines a name is called the scope of that name. In a procedure definition, the bound variables declared as the formal parameters of the procedure have the body of the procedure as their scope.
+
+In the definition of good-enough? above, guess and x are bound variables but <, -, abs, and square are free. The meaning of good-enough? should be independent of the names we choose for guess and x so long as they are distinct and different from <, -, abs, and square. (If we renamed guess to abs we would have introduced a bug by capturing the variable abs. It would have changed from free to bound.) The meaning of good-enough? is not independent of the names of its free variables, however. It surely depends upon the fact (external to this definition) that the symbol abs names a procedure for computing the absolute value of a number. Good-enough? will compute a different function if we substitute cos for abs in its definition.
+
+*** Internal definitions and block structure
+
+We have one kind of name isolation available to us so far: The formal parameters of a procedure are local to the body of the procedure. The square-root program illustrates another way in which we would like to control the use of names. The existing program consists of separate procedures:
+
+: (define (sqrt x)
+:   (sqrt-iter 1.0 x))
+: (define (sqrt-iter guess x)
+:   (if (good-enough? guess x)
+:       guess
+:       (sqrt-iter (improve guess x) x)))
+: (define (good-enough? guess x)
+:   (< (abs (- (square guess) x)) 0.001))
+: (define (improve guess x)
+:   (average guess (/ x guess)))
+
+The problem with this program is that the only procedure that is important to users of sqrt is sqrt. The other procedures (sqrt-iter, good-enough?, and improve) only clutter up their minds. They may not define any other procedure called good-enough? as part of another program to work together with the square-root program, because sqrt needs it. The problem is especially severe in the construction of large systems by many separate programmers. For example, in the construction of a large library of numerical procedures, many numerical functions are computed as successive approximations and thus might have procedures named good-enough? and improve as auxiliary procedures. We would like to localize the subprocedures, hiding them inside sqrt so that sqrt could ~coexist~ with other successive approximations, each having its own private good-enough? procedure. To make this possible, we allow a procedure to have internal definitions that are local to that procedure. For example, in the square-root problem we can write
+
+: (define (sqrt x)
+:   (define (good-enough? guess x)
+:     (< (abs (- (square guess) x)) 0.001))
+:   (define (improve guess x)
+:     (average guess (/ x guess)))
+:   (define (sqrt-iter guess x)
+:     (if (good-enough? guess x)
+:         guess
+:         (sqrt-iter (improve guess x) x)))
+:   (sqrt-iter 1.0 x))
+
+Such nesting of definitions, called block structure, is basically the right solution to the simplest name-packaging problem. But there is a better idea =lurking= here. In addition to internalizing the definitions of the auxiliary procedures, we can simplify them. Since x is bound in the definition of sqrt, the procedures good-enough?, improve, and sqrt-iter, which are defined internally to sqrt, are in the scope of x. Thus, it is not necessary to pass x explicitly to each of these procedures. Instead, we allow x to be a free variable in the internal definitions, as shown below. Then x gets its value from the argument with which the enclosing procedure sqrt is called. This discipline is called lexical scoping.
+
+: (define (sqrt x)
+:   (define (good-enough? guess)
+:     (< (abs (- (square guess) x)) 0.001))
+:   (define (improve guess)
+:     (average guess (/ x guess)))
+:   (define (sqrt-iter guess)
+:     (if (good-enough? guess)
+:         guess
+:         (sqrt-iter (improve guess))))
+:   (sqrt-iter 1.0))
+
+We will use block structure extensively to help us break up large programs into tractable pieces.28 The idea of block structure originated with the programming language Algol 60. It appears in most advanced programming languages and is an important tool for helping to organize the construction of large programs.
+# 这一章便是引入了"block structure", 而我现在则是用"block"的方法构架我的基础.
+
+#+begin_src emacs-lisp :tangle yes
+(defun find_square_root(n)
+       (cond ((good?)
+
+                            ))
+#+end_src
+
+* 1.2 Procedures and the Processes They Generate
+总结: visualize, predict, reasonalbly
+# 标题里就能看出来, procedure命名的优势.
+# blocks up采用3 2 1的结构.
+** Pre
+We have now considered the elements of programming:
+# 下面总结1.1
+We have used primitive arithmetic operations,
+we have combined these operations,
+and we have abstracted these =composite= operations by defining them as compound procedures.
+But that is not enough to enable us to say that we know how to program. Our situation is analogous to that of someone who has learned the rules for how the pieces move in chess but knows nothing of *typical openings, tactics, or strategy*.
+# 这是前几天总结的工艺吗? 这里要学习的是tactics
+Like the novice chess player, we don't yet know the common patterns of usage in the domain. We lack the knowledge of which moves are worth making (which procedures are worth defining). We lack the experience to predict the consequences of making a move (executing a procedure).
+# 第一处类比
+
+*The ability to visualize the consequences of the actions*
+# 此处道出编程的诀窍.visualize起运行.
+under consideration is crucial to becoming an expert programmer, just as it is in any synthetic, creative activity. In becoming an expert photographer, for example, one must learn how to look at a scene and know how dark each region will appear on a print for each possible choice of exposure and development conditions. *Only then can one reason backward, planning framing, lighting, exposure, and development to obtain the desired effects*. So it is with programming, where we are planning the course of action to be taken by a process and where we control the process by means of a program. To become experts, we must learn to visualize the processes generated by various types of procedures. Only after we have developed such a skill can we learn to reliably construct programs that exhibit the desired behavior.
+# 再次出现关键词, visualize the process.
+
+A procedure is a pattern for the local evolution{#再次使用这个词#} of a computational process. It specifies how each stage of the process is built upon the previous stage. We would like to be able to make statements about the overall, or global, behavior of a process whose local evolution has been specified by a procedure.
+# 点出procedure与process的关系.
+This is very difficult to do in general, but we can at least try to describe some typical patterns of process evolution.
+
+In this section we will examine some common ``shapes'' for processes generated by simple procedures. We will also investigate the rates at which these processes consume the important computational resources of time and space. The procedures we will consider are very simple. Their role is like that played by test patterns in photography: as oversimplified prototypical patterns, rather than practical examples in their own right.
+
+** 1.2.1 Linear Recursion and Iteration
+
+[[../images/algorithms.org_20190716_160446.png]]
+# linear线性结构.
+Figure 1.3:  A linear recursive process for computing 6!.
+
+We begin by considering the factorial function, defined by
+[[../images/Books.SICP.org_20191027_102441.png]]
+
+There are many ways to compute factorials. One way is to make use of the observation that n! is equal to n times (n - 1)! for any positive integer n:
+[[../images/Books.SICP.org_20191027_102516.png]]
+
+Thus, we can compute n! by computing (n - 1)! and multiplying the result by n. If we add the stipulation that 1! is equal to 1, this observation translates directly into a procedure:
+# 从命名中去理解, 顾名思义. factor是乘数, 因此factorial是阶乘.
+#+BEGIN_SRC elisp
+(defun factorial(n)
+  (if (= n 1)
+      1
+      (* n (factorial (- n 1)))))
+(factorial 3)
+#+END_SRC
+# base case是在中间
+#+RESULTS:
+: 6
+
+We can use the substitution model of section 1.1.5 to watch this procedure in action computing 6!, as shown in figure 1.3.
+
+Now let's take a different perspective on computing factorials. We could describe a rule for computing n! by specifying that we first multiply 1 by 2, then multiply the result by 3, then by 4, and so on until we reach n. More formally, we maintain a running product, together with a counter that counts from 1 up to n. We can describe the computation by saying that the counter and the product simultaneously change from one step to the next according to the rule．
+
+
+Iteration
+product   counter · product
+counter   counter + 1
+# iteration要加counter
+[[../images/algorithms.org_20190716_182712.png]]1
+Figure 1.4:  A linear iterative process for computing 6!.
+Once again, we can recast our description as a procedure for computing factorials
+#+BEGIN_SRC elisp :tangle yes
+(defun factorial (n)
+  (fact-iter 1 1 n))
+;; 三个参数
+(defun fact-iter (product counter max-count)
+  (if (> counter max-count)
+      product
+      (fact-iter (* counter product)
+                 (+ counter 1)
+                 max-count)))
+factorial(10)
+#+END_SRC
+
+#+RESULTS:
+: #<unspecified>
+
+As before, we can use the substitution model to visualize the process of computing 6!, as shown in figure 1.4.
+
+Compare the two processes. From one point of view, they seem hardly different at all. Both compute the same mathematical function on the same domain, and each requires a number of steps proportional to n to compute n!. Indeed, both processes even carry out the same sequence{#一直用sequence#} of multiplications, obtaining the same sequence of partial products. On the other hand, when we consider the ``shapes'' of the two processes, we find that they evolve quite differently.
+# shape, visualize the shape
+
+Consider the first process. The substitution model reveals a shape of expansion followed by =contraction=, indicated by the arrow in figure 1.3. The expansion occurs as the process builds up a chain of =deferred operations= (in this case, a chain of multiplications). The contraction occurs as the operations are actually performed. This type of process, characterized by a chain of deferred operations, is called a recursive process. Carrying out this process requires that the interpreter keep track of the operations to be performed later on. In the computation of n!, the length of the chain of deferred multiplications, and hence the amount of information needed to keep track of it, grows linearly with n (is proportional to n), just like the number of steps. Such a process is called *a linear recursive process*.
+# 提出概念, linear recursive
+#+BEGIN_QUOTE
+Constraction: 收缩
+- 助记:
+  Con+tract(draw, trace)
+  正好没有一个合适的词汇描述fold与unfold.
+Defer delay, postpone
+- Define:
+  deferred operations, 终于找到你,终于找到合适的概念描述.比其他词汇传神.
+#+END_QUOTE
+
+
+By contrast, the second process does not grow and shrink.
+# expand, contraction; grow and shrink另一种说法.
+At each step, all we need to keep track of, for any =n=, are the current values of the variables product, counter, and max-count. We call this an iterative process. In general, an iterative process is one whose state can be summarized by
+1) a fixed number of state variables,
+2) together with a fixed rule that describes how the state variables should be updated as the process moves from state to state
+3) and an (optional) end test that specifies conditions under which the process should terminate.
+In computing n!, the number of steps required grows linearly with n. Such a process is called *a linear iterative process*.
+# 总结得真好, state variable and how it should be updated. 妙哉妙哉
+# 本质上还是recursives
+# 此三点在 for i in rang(10) 中解决.
+# state一下子抓住了概念, state, update(state), terminate, 三点
+
+In contrasting iteration and recursion, we must be careful not to confuse the notion of a recursive process with the notion of a recursive procedure. When we describe a procedure as recursive, we are referring to the syntactic fact that the procedure definition refers (either directly or indirectly) to the procedure itself.
+# 区分的好,可以用recursive procedure实现iterative process. procedure是syntactic.
+But when we describe a process as following a pattern that is, say, linearly recursive, we are speaking about how the process evolves, not about the syntax of how a procedure is written. It may seem disturbing that we refer to a recursive procedure such as fact-iter as generating an iterative process. However, the process really is iterative:
+Its state is captured completely by its three state variables, and an interpreter need keep track of only three variables in order to execute the process.
+# 此处为关键点, 就是看interpreter行为, Keep trace a chain is recursvie, otherwise is interative.
+
+However, the process really is iterative: Its state is captured completely by its three state variables, and an interpreter need keep track of only three variables in order to execute the process.
+# 怪不得, 我之前有很多的困惑呢.一直维持三个变量就是iterative.
+
+One reason that the distinction between process and procedure may be confusing is that most implementations of common languages (including Ada, Pascal, and C) are designed in such a way that the interpretation of any recursive procedure consumes an amount of memory that grows with the number of procedure calls, even when the process described is, in principle, iterative. As a consequence, these languages can describe iterative processes only by resorting to special-purpose ``looping constructs'' such as do, repeat, until, for, and while. The implementation of Scheme we shall consider in chapter 5 does not share this =defect=. It will execute an iterative process in constant space, even if the iterative process is described by a recursive procedure. An implementation with this property is called =tail-recursive=. With a tail-recursive implementation, iteration can be expressed using the ordinary procedure call mechanism, so that special iteration constructs are useful only as syntactic sugar.[fn:tail-recursion]
+# tail recursion in essense is iterative.
+
+Exercise 1.9.  Each of the following two procedures defines a method for adding two positive integers in terms of the procedures inc, which increments its argument by 1, and dec, which decrements its argument by 1.
+#+begin_src emacs-lisp :tangle yes
+(define (+ a b)
+  (if (= a 0)
+      b
+    (inc (+ (dec a) b))
+    )
+  )
+
+(define (+ a b)
+  (if (= a 0)
+      b
+    (+ (dec a) (inc b))))
+# 直接看不懂, 这是在定义 +
+#+end_src
+Using the substitution model, illustrate the process generated by each procedure in evaluating (+ 4 5). Are these processes iterative or recursive?
+
+
+Exercise 1.10.  The following procedure computes a mathematical function called Ackermann's function.
+[[../images/Books.SICP.org_20191027_120327.png]]
+# python表达也很简单.
+#+BEGIN_SRC elisp
+(defun A (x y)
+  (cond ((= y 0) 0)
+        ((= x 0) (* 2 y))
+        ((= y 1) 2)
+        (else (A (- x 1)
+                 (A x (- y 1))))))
+
+(A 1 10)
+#+END_SRC
+
+#+RESULTS:
+: 1024
+
+这个语言是比较牛呀.
+ ack 0 n = n + 1
+ ack m 0 = ack (m - 1) 1
+ ack m n = ack (m - 1) (ack m (n - 1))
+
+[fn:tail-recursion]
+31 Tail recursion has long been known as a compiler optimization trick. A coherent semantic basis for tail recursion was provided by Carl Hewitt (1977), who explained it in terms of the ``message-passing'' model of computation that we shall discuss in chapter 3. Inspired by this, Gerald Jay Sussman and Guy Lewis Steele Jr. (see Steele 1975) constructed a tail-recursive interpreter for Scheme. Steele later showed how tail recursion is a consequence of the natural way to compile procedure calls (Steele 1977). The IEEE standard for Scheme requires that Scheme implementations be tail-recursive.
+
+** 1.2.2 Tree Recursion
+
+Another common pattern of computation is called tree recursion. As an example, consider computing the sequence of Fibonacci numbers, in which each number is the sum of the preceding two:
+
+In general, the Fibonacci numbers can be defined by the rule
+[[../images/algorithms.org_20190717_163543.png]]
+
+We can immediately translate this definition into a recursive procedure for computing Fibonacci numbers:
+#+begin_src emacs-lisp
+(defun fib(n)
+  (cond ((= n 0) 0)
+        ((= n 1) 1)
+        (t (+ (fib (- n 1))
+              (fib (- n 2))))))
+(fib 10) ;; (乃是invoke
+#+end_src
+
+#+RESULTS:
+: 55
+
+# 刚才一直用fib(10)
+#+RESULTS:
+: 55
+
+# 此处的cond用得好, conditional
+
+#+name: Figure 1.5: The tree-recursive process generated in computing (fib 5).
+[[../images/algorithms.org_20190717_163710.png]]
+
+Consider the pattern of this computation. To compute (fib 5), we compute (fib 4) and (fib 3). To compute (fib 4), we compute (fib 3) and (fib 2). In general, the evolved{#还是这个词#} process looks like a tree, as shown in figure 1.5. Notice that the branches split into two at each level (except at the bottom); this reflects the fact that the fib procedure calls itself twice each time it is invoked.
+
+This procedure is instructive as a prototypical tree recursion, but it is a terrible way to compute Fibonacci numbers because it does so much redundant computation. Notice in figure 1.5 that the entire computation of (fib 3) -- almost half the work -- is duplicated. In fact, it is not hard to show that the number of times the procedure will compute (fib 1) or (fib 0) (the number of leaves in the above tree, in general) is precisely Fib(n + 1). To get an idea of how bad this is, one can show that the value of Fib(n) grows exponentially with n. More precisely (see exercise 1.13), Fib(n) is the closest integer to [[../images/Books.SICP.org_20191027_153313.png]][fn:fib] ,
+where
+[[../images/Books.SICP.org_20191027_153903.png]]
+计算过程:
+[[../images/Books.SICP.org_20191027_154017.png]]
+
+# 想象成rectangle比线段好很多.
+
+
+#+BEGIN_SRC elisp
+(defun fib (n)
+  (fib-iter 1 0 n))
+
+(defun fib-iter (a b count)
+  (if (= count 0)
+      b
+      (fib-iter (+ a b) a (- count 1))))
+;; 这是倒车计算的思维.
+(fib 9)
+#+END_SRC
+
+#+RESULTS:
+: 34
+
+#+BEGIN_SRC elisp
+(defun fib-iter (a b count)
+  (if (= count 0)
+      a
+      (fib-iter b (+ a b) (- count 1))
+  )
+)
+(defun fib(n)
+  (fib-iter 0 1 n))
+
+(fib 5)
+#+END_SRC
+
+#+RESULTS:
+: 5
+#+BEGIN_QUOTE
+Suppose a completed fibonacci number table, search X in  the table by jumping step by step from 0 to X.
+The solution is barely intuitive.
+#+END_QUOTE
+
+
+# 上面这个是按照我的思路修改的.
+# 原版的思路
+#+begin_src emacs-lisp :session sicp
+(defun fib-iter (a b count)
+  (if (= count 0)
+      b
+      (fib-iter (+ a b) a (- count 1))))
+
+(defun fib (n)
+  (fib-iter 1 0 n))
+
+(fib 4)
+#+end_src
+
+#+RESULTS:
+: 3
+
+#+begin_src ipython :session alinbx :results output
+def fib_inter(a, b, count):
+    if count == 0: return b
+    else: return fib_inter((a+b), a,  (count-1))
+def fib(n):
+    return fib_inter(1, 0, n)
+
+print(fib(3))
+#+end_src
+
+#+RESULTS:
+: 2
+
+#+begin_src emacs-lisp :session sicp :results output
+(print(list 1 2))
+#+end_src
+
+#+RESULTS:
+:
+: (1 2)
+
+**Example: Counting change**
+#+BEGIN_SRC scheme
+(defun (count-change amount)
+  (cc amount 5))
+(defun (cc amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (= kinds-of-coins 0)) 0)
+        (else (+ (cc amount
+                     (- kinds-of-coins 1))
+                 (cc (- amount
+                        (first-denomination kinds-of-coins))
+                     kinds-of-coins)))))
+(defun (first-denomination kinds-of-coins)
+  (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+
+(count-change 100)
+#+END_SRC
+
+#+RESULTS:
+: 292
+
+
+#+BEGIN_SRC elisp
+(defun count-change (amount)
+  (cc amount 5))
+
+(defun cc (amount kinds-of-coins)
+  (cond ((= amount 0) 1)
+        ((or (< amount 0) (= kinds-of-coins 0)) 0)
+        (else (+ (cc amount
+                     (- kinds-of-coins 1))
+                 (cc (- amount
+                        (first-denomination kinds-of-coins))
+                     kinds-of-coins)))))
+
+(defun first-denomination (kinds-of-coins)
+   (cond ((= kinds-of-coins 1) 1)
+        ((= kinds-of-coins 2) 5)
+        ((= kinds-of-coins 3) 10)
+        ((= kinds-of-coins 4) 25)
+        ((= kinds-of-coins 5) 50)))
+
+(count-change 100)
+
+#+END_SRC
+
+
+#+BEGIN_SRC elisp
+
+(defun factorial (n)
+  (fact-iter 1 1 n))
+
+(defun fact-iter (product counter max-count)
+  (if (> counter max-count)
+      product
+      (fact-iter (* counter product)
+                 (+ counter 1)
+                 max-count)
+   )
+)
+
+(factorial 3)
+#+END_SRC
+
+#+RESULTS:
+: 6
+
+[fn:fib]
+https://math.stackexchange.com/questions/992811/prove-the-nth-fibonacci-number-is-the-integer-closest-to-frac1-sqrt5-l
+
+** 1.2.3 Orders of Growth
+
+The previous examples illustrate that processes can differ considerably in the rates at which they consume computational resources. One convenient way to describe this difference is to use the *notion of order* of growth to obtain a gross measure of the resources required by a process as the inputs become larger.
+# CPU 2.9GHz, 振动一次, 光速只能前进0.1米
+Let n be a parameter that measures the size of the problem, and let R(n) be the amount of resources the process requires for a problem of size n. In our previous examples we took n to be the number for which a given function is to be computed, but there are other possibilities. For instance, if our goal is to compute an approximation to the square root of a number, we might take n to be the number of digits accuracy required. For matrix multiplication we might take n to be the number of rows in the matrices. In general there are a number of properties of the problem with respect to which it will be desirable to analyze a given process. Similarly, R(n) might measure the number of internal storage registers used, the number of elementary machine operations performed, and so on. In computers that do only a fixed number of operations at a time, the time required will be proportional to the number of elementary machine operations performed.
+
+We say that R(n) has order of growth (f(n)), written R(n) =Θ(f(n)) (pronounced ``theta of f(n)''), if there are positive constants k1 and k2 independent of n such that
+: k1f(n) <= R(n) <=k2f(n)
+
+for any sufficiently large value of n. (In other words, for large n, the value R(n) is sandwiched between k1f(n) and k2f(n).)
+
+For instance, with the linear recursive process for computing factorial described in section 1.2.1 the number of steps grows proportionally to the input n. Thus, the steps required for this process grows as Θ(n). We also saw that the space required grows as Θ(n). For the iterative factorial, the number of steps is still Θ(n)  but the space is Θ(1) -- that is, constant. The tree-recursive Fibonacci computation requires Θ(n) steps and =space Θ(n)=, where is the golden ratio described in section 1.2.2.
+# 此刻了然了, space空间复杂度.
+Orders of growth provide only a crude description of the behavior of a process. For example, a process requiring n2 steps and a process requiring 1000n2 steps and a process requiring 3n2 + 10n + 17 steps all have (n2) order of growth. On the other hand, order of growth provides a useful indication of how we may expect the behavior of the process to change as we change the size of the problem. For a Θ(n) (linear) process, doubling the size will roughly double the amount of resources used. For an exponential process, each increment in problem size will multiply the resource utilization by a constant factor. In the remainder of section 1.2 we will examine two algorithms whose order of growth is logarithmic, so that doubling the problem size increases the resource requirement by a constant amount.
+
+Exercise 1.14.  Draw the tree illustrating the process generated by the count-change procedure of section 1.2.2 in making change for 11 cents. What are the orders of growth of the space and number of steps used by this process as the amount to be changed increases?
+
+Exercise 1.15.  The sine of an angle (specified in radians) can be computed by making use of the approximation sin x≈x if x is sufficiently small, and the trigonometric identity
+[[../images/Books.SICP.org_20191028_171520.png]]
+
+to reduce the size of the argument of sin. (For purposes of this exercise an angle is considered ``sufficiently small'' if its magnitude is not greater than 0.1 radians.) These ideas are incorporated in the following procedures:
+
+: (define (cube x) (* x x x))
+: (define (p x) (- (* 3 x) (* 4 (cube x))))
+: (define (sine angle)
+:    (if (not (> (abs angle) 0.1))
+:        angle
+:        (p (sine (/ angle 3.0)))))
+
+a. How many times is the procedure p applied when (sine 12.15) is evaluated?
+
+b. What is the order of growth in space and number of steps (as a function of a) used by the process generated by the sine procedure when (sine a) is evaluated?
+
+** 1.2.4 Exponentiatio n
+
+Consider the problem of computing the exponential of a given number. We would like a procedure that takes as arguments a base b and a positive integer exponent n and computes b**n. One way to do this is via the recursive definition
+
+which translates readily into the procedure
+#+begin_src emacs-lisp
+(defun expt (b n)
+  (if (= n 0)
+      1
+      (* b (expt b (- n 1)))
+  )
+)
+(expt 3 3)
+#+end_src
+
+#+RESULTS:
+: 27
+
+This is a linear recursive process, which requires (n) steps and (n) space. Just as with factorial, we can readily formulate an equivalent linear iteration:
+
+#+begin_src emacs-lisp :session sicp :results value
+(defun expt(b n)
+  (expt-iter b n 1))
+
+(defun expt-iter (b counter product)
+  (if (= counter 0)
+      product
+      (expt-iter b
+                (- counter 1)
+                (* b product))))
+(expt 3 3)
+
+#+end_src
+
+#+RESULTS:
+: 27
+
+This version requires Θ(n) steps and Θ(1) space.
+
+We can compute exponentials in fewer steps by using successive squaring. For instance, rather than computing b8 as
+[[../images/Books.SICP.org_20191028_174555.png]]
+
+we can compute it using three multiplications:
+[[../images/Books.SICP.org_20191028_174604.png]]
+
+This method works fine for exponents that are powers of 2. We can also take advantage of successive squaring in computing exponentials in general if we use the rule
+
+We can express this method as a procedure:
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun fast-expt(b n)
+  (cond ((= n 0) 1)
+        ((even? n) (square (fast-expt b (/ n 2))))
+        (else (* b (fast-expt b (- n 1))))))
+
+(print (fast-expt(3 3)))
+#+end_src
+
+where the predicate to test whether an integer is even is defined in terms of the primitive procedure remainder by
+
+: (define (even? n)
+:   (= (remainder n 2) 0))
+
+The process evolved by fast-expt grows logarithmically with n in both space and number of steps. To see this, observe that computing b2n using fast-expt requires only one more multiplication than computing bn. The size of the exponent we can compute therefore doubles (approximately) with every new multiplication we are allowed. Thus, the number of multiplications required for an exponent of n grows about as fast as the logarithm of n to the base 2. The process has Θ(log n) growth.37
+
+The difference between Θ(log n) growth and Θ(n) growth becomes striking as n becomes large. For example, fast-expt for n = 1000 requires only 14 multiplications.It is also possible to use the idea of successive squaring to devise an iterative algorithm that computes exponentials with a logarithmic number of steps (see exercise 1.16), although, as is often the case with iterative algorithms, this is not written down so straightforwardly as the recursive algorithm.
+
+Exercise 1.16.  Design a procedure that evolves an iterative exponentiation process that uses successive squaring and uses a logarithmic number of steps, as does fast-expt. (Hint: Using the observation that =(bn/2)2 = (b2)n/2=, keep, along with the exponent n and the base b, an additional state variable a, and define the state transformation in such a way that the product a bn is unchanged from state to state. At the beginning of the process a is taken to be 1, and the answer is given by the value of a at the end of the process. In general, the technique of defining an invariant quantity that remains unchanged from state to state is a powerful way to think about the design of iterative algorithms.)
+
+Exercise 1.17.  The exponentiation algorithms in this section are based on performing exponentiation by means of repeated multiplication. In a similar way, one can perform integer multiplication by means of repeated addition. The following multiplication procedure (in which it is assumed that our language can only add, not multiply) is analogous to the expt procedure:
+
+(define (* a b)
+  (if (= b 0)
+      0
+      (+ a (* a (- b 1)))))
+
+This algorithm takes a number of steps that is linear in b. Now suppose we include, together with addition, operations double, which doubles an integer, and halve, which divides an (even) integer by 2. Using these, design a multiplication procedure analogous to fast-expt that uses a logarithmic number of steps.
+
+Exercise 1.18.  Using the results of exercises 1.16 and 1.17, devise a procedure that generates an iterative process for multiplying two integers in terms of adding, doubling, and halving and uses a logarithmic number of steps.40
+
+Exercise 1.19.   There is a clever algorithm for computing the Fibonacci numbers in a logarithmic number of steps. Recall the transformation of the state variables a and b in the fib-iter process of section 1.2.2: a a + b and b a. Call this transformation T, and observe that applying T over and over again n times, starting with 1 and 0, produces the pair Fib(n + 1) and Fib(n). In other words, the Fibonacci numbers are produced by applying Tn, the nth power of the transformation T, starting with the pair (1,0). Now consider T to be the special case of p = 0 and q = 1 in a family of transformations Tpq, where Tpq transforms the pair (a,b) according to a bq + aq + ap and b bp + aq. Show that if we apply such a transformation Tpq twice, the effect is the same as using a single transformation Tp'q' of the same form, and compute p' and q' in terms of p and q. This gives us an explicit way to square these transformations, and thus we can compute Tn using successive squaring, as in the fast-expt procedure. Put this all together to complete the following procedure, which runs in a logarithmic number of steps:41
+
+#+begin_src emacs-lisp :session sicp :results output
+(define (fib n)
+  (fib-iter 1 0 0 1 n))
+(define (fib-iter a b p q count)
+  (cond ((= count 0) b)
+        ((even? count)
+         (fib-iter a
+                   b
+                   <??>      ; compute p'
+                   <??>      ; compute q'
+                   (/ count 2)))
+        (else (fib-iter (+ (* b q) (* a q) (* a p))
+                        (+ (* b p) (* a q))
+                        p
+                        q
+                        (- count 1)))))
+#+end_src
+
+** 1.2.5 Greatest Common Divisors
+# 最大公约数
+# 要观察所有的内容对我的生活有何影响与改变.
+The greatest common divisor (GCD) of two integers a and b is defined to be the largest integer that divides both a and b with no remainder. For example, the GCD of 16 and 28 is 4. In chapter 2, when we investigate how to implement rational-number arithmetic, we will need to be able to compute GCDs in order to reduce rational numbers to lowest terms. (To reduce a rational number to lowest terms, we must divide both the numerator and the denominator by their GCD. For example, 16/28 reduces to 4/7.) One way to find the GCD of two integers is to factor them and search for common factors, but there is a famous algorithm that is much more efficient.
+
+The idea of the algorithm is based on the observation that, if r is the remainder when a is divided by b, then the common divisors of a and b are precisely the same as the common divisors of b and r. Thus, we can use the equation:
+[[../images/Books.SICP.org_20191028_180528.png]]
+# 刚注意到这里的r是remainder
+
+to successively reduce the problem of computing a GCD to the problem of computing the GCD of smaller and smaller pairs of integers. For example,
+[[../images/Books.SICP.org_20191028_180701.png]]
+
+reduces GCD(206,40) to GCD(2,0), which is 2. It is possible to show that starting with any two positive integers and performing repeated reductions will always eventually produce a pair where the second number is 0. Then the GCD is the other number in the pair. This method for computing the GCD is known as Euclid's Algorithm.[fn:Euclid]
+
+
+ It is easy to express Euclid's Algorithm as a procedure:
+
+ #+begin_src emacs-lisp :session sicp
+(defun gcd (a b)
+  (if (= b 0)
+      a
+      (gcd b (remainder a b))))
+;; 分层的abtraction结构.
+(defun remainder(a b)
+  (% a b))
+(gcd  27  81)
+ #+end_src
+
+ #+RESULTS:
+ : 27
+
+This generates an iterative process, whose number of steps grows as the logarithm of the numbers involved.
+
+The fact that the number of steps required by Euclid's Algorithm has logarithmic growth bears an interesting relation to the Fibonacci numbers:
+
+
+Lamé's Theorem: If Euclid's Algorithm requires k steps to compute the GCD of some pair, then the smaller number in the pair must be greater than or equal to the kth Fibonacci number.43
+
+We can use this theorem to get an order-of-growth estimate for Euclid's Algorithm. Let n be the smaller of the two inputs to the procedure. If the process takes k steps, then we must have n> Fib (k) k/5. Therefore the number of steps k grows as the logarithm (to the base ) of n. Hence, the order of growth is (log n).
+
+Exercise 1.20.  The process that a procedure generates is of course dependent on the rules used by the interpreter. As an example, consider the iterative gcd procedure given above. Suppose we were to interpret this procedure using normal-order evaluation, as discussed in section 1.1.5. (The normal-order-evaluation rule for if is described in exercise 1.5.) Using the substitution method (for normal order), illustrate the process generated in evaluating (gcd 206 40) and indicate the remainder operations that are actually performed. How many remainder operations are actually performed in the normal-order evaluation of (gcd 206 40)? In the applicative-order evaluation?
+
+** 1.2.6 Example: Testing for Primalit
+# 刚明白过来, 原来这个单词是质数.
+
+This section describes two methods for checking the primality of an integer n , one with order of growth Θ(n**1/2) , and a “probabilistic” algorithm with order of growth Θ (log n) . The exercises at the end of this section suggest programming projects based on these algorithms.
+
+Since ancient times, mathematicians have been fascinated by problems concerning prime numbers, and many people have worked on the problem of determining ways to test if numbers are prime. One way to test if a number is prime is to find the number’s divisors. The following program finds the smallest integral divisor (greater than 1) of a given number n . It does this in a straightforward way, by testing n for divisibility by successive integers starting with 2.
+
+#+begin_src emacs-lisp :session sicp :results output
+(define (smallest-divisor n)
+  (find-divisor n 2))
+
+(define (find-divisor n test-divisor)
+  (cond ((> (square test-divisor) n)
+         n)
+        ((divides? test-divisor n)
+         test-divisor)
+        (else (find-divisor
+               n
+               (+ test-divisor 1)))))
+
+(define (divides? a b)
+  (= (remainder b a) 0))
+#+end_src
+
+We can test whether a number is prime as follows: n is prime if and only if n is its own smallest divisor.
+
+(define (prime? n)
+  (= n (smallest-divisor n)))
+
+The end test for find-divisor is based on the fact that if n is not prime it must have a divisor less than or equal to n. This means that the algorithm need only test divisors between 1 and n. Consequently, the number of steps required to identify n as prime will have order of growth Θ(n) .
+
+
+[fn:Euclid]
+Euclid's Algorithm is so called because it appears in Euclid's Elements (Book 7, ca. 300 B.C.). According to Knuth (1973), it can be considered the oldest known nontrivial algorithm. The ancient Egyptian method of multiplication (exercise 1.18) is surely older, but, as Knuth explains, Euclid's algorithm is the oldest known to have been presented as a general algorithm, rather than as a set of illustrative examples.
+
+* 1.3 Formulating Abstractions with Higher-Order Procedures
+# 横向结构  lambda argument --> returned value
+# 最后是general methods
+** Pre
+We have seen that procedures are, in effect, abstractions that describe compound operations on numbers independent of the particular numbers. For example, when we
+
+: (defun (cube x) (* x x x))
+
+we are not talking about the cube of a particular number, but rather about a method for obtaining the cube of any number. Of course we could get along without ever defining this procedure, by always writing expressions such as
+
+(* 3 3 3)
+(* x x x)
+(* y y y)
+
+and never mentioning cube explicitly. This would place us at a serious disadvantage, forcing us to work always at the level of the particular operations that happen to be primitives in the language (multiplication, in this case) rather than in terms of higher-level operations. Our programs would be able to compute cubes, but our language would lack the ability to express the concept of cubing.
+# procedure放在前面正是explicit concept的用处.
+One of the things we should demand from a powerful programming language is the ability to build abstractions by assigning names to common patterns and then to work in terms of the abstractions directly. Procedures provide this ability. This is why all but the most primitive programming languages include mechanisms for defining procedures.
+
+Yet even in numerical processing we will be severely limited in our ability to create abstractions if we are restricted to procedures whose parameters must be numbers. Often the same programming pattern will be used with a number of different procedures. To express such patterns as concepts, we will need to construct procedures that can accept procedures as arguments or return procedures as values. Procedures that manipulate procedures are called higher-order procedures. This section shows how higher-order procedures can serve as powerful abstraction mechanisms, vastly increasing the expressive power of our language.
+
+** 1.3.1 Procedures as Arguments
+
+Consider the following three procedures. The first computes the sum of the integers from a through b:
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun sum-integers(a b)
+   (if (> a b)
+       0 ;;
+       (+ a (sum-integers (+ a 1) b)) # 用得实在是妙
+    ))
+
+(print (sum-integers 2 4))
+#+end_src
+
+#+RESULTS:
+:
+: 9
+
+#+begin_src ipython :session alinbx :results output
+def sum_integers(a, b):
+    if a > b: return 0
+    else: return a + sum_integers(a+1, b)
+print(sum_integers(2, 4))
+# 等于零的情况考虑在内.
+# 而且没有使用循环结构.
+#+end_src
+
+#+RESULTS:
+: 9
+
+
+The second computes the sum of the cubes of the integers in the given range:
+
+#+begin_src emacs-lisp :session sicp
+(defun sum-cubes(a b)
+  (if (> a b)
+      0
+      (+ (cube a) (sum-cubes (+ a 1) b))))
+
+(sum-cubes 2 3)
+#+end_src
+
+The third computes the sum of a sequence of terms in the series
+which converges to π/8 (very slowly)[fn:pi]:
+[[../images/Books.SICP.org_20191028_233157.png]]
+
+#+begin_src emacs-lisp :session sicp
+(defun pi-sum(a b)
+  (if (> a b)
+      0
+      (+ (/ 1.0 (* a (+ a 2))) (pi-sum (+ a 4) b))))
+(pi-sum 1 11)
+#+end_src
+
+#+RESULTS:
+: 0.372005772005772
+
+These three procedures clearly share a common underlying pattern. They are for the most part identical, differing only in the name of the procedure, the function of a used to compute the term to be added, and the function that provides the next value of a. We could generate each of the procedures by filling in slots in the same template:
+
+: (defun (<name> a b)
+:   (if (> a b)
+:       0
+:       (+ (<term> a)
+:          (<name> (<next> a) b))))
+
+The presence of such a common pattern is strong evidence that there is a useful abstraction waiting to be brought to the surface. Indeed, mathematicians long ago identified the abstraction of summation of a series and invented ``sigma notation,'' for example
+
+[[../images/algorithms.org_20190717_165507.png]]
+# 加和符号与abstraction的对比.
+to express this concept. The power of sigma notation is that it allows mathematicians to deal with the concept of summation itself rather than only with particular sums -- for example, to formulate general results about sums that are independent of the particular series being summed.
+
+Similarly, as program designers, we would like our language to be powerful enough so that we can write a procedure that expresses the concept of summation itself rather than only procedures that compute particular sums. We can do so readily in our procedural language by taking the common template shown above and transforming the ``slots'' into formal parameters:
+
+#+begin_src emacs-lisp :session sicp :results output
+(defun sum(term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+#+end_src
+
+#+RESULTS:
+
+# 确实能够窥探其本质.
+
+#+RESULTS:
+
+Notice that sum takes as its arguments the lower and upper bounds a and b together with the procedures term and next. We can use sum just as we would any procedure. For example, we can use it (along with a procedure inc that increments its argument by 1) to define sum-cubes:
+
+#+begin_src emacs-lisp :session sicp
+(defun cube(n) (* n n n))
+(defun inc(n) (+ n 1))
+ (defun sum-cubes(a b)
+   (sum cube a inc))
+(sum-cubes 1 10)
+#+end_src
+# 此处引入next的概念．
+
+问题: procedure在function中与quote的区别.
+# 可以作为标签被搜索
+总算清楚了, 为什么说lisp的data and procedure可以互相转换.
+python只有在定义过程中才能实现这一点. procedure as argument. 尤其指出if不能作为argument很有意思.
+具体如何作用现在并没有全部理解.
+问过之后, 互相转换就是指的传入到arguments.
+
+
+Using this, we can compute the sum of the cubes of the integers from 1 to 10:
+
+
+
+With the aid of an identity procedure to compute the term, we can define sum-integers in terms of sum:
+
+: (defun identity (x) x)
+:
+: (defun (sum-integers a b)
+:   (sum identity a inc b))
+
+Then we can add up the integers from 1 to 10:
+
+: (sum-integers 1 10)
+: 55
+
+We can also define pi-sum in the same way:50
+
+: (defun (pi-sum a b)
+:   (define (pi-term x)
+:     (/ 1.0 (* x (+ x 2))))
+:   (define (pi-next x)
+:     (+ x 4))
+:   (sum pi-term a pi-next b))
+
+Using these procedures, we can compute an approximation to  :
+
+: (* 8 (pi-sum 1 1000))
+3.139592655589783
+
+Once we have sum, we can use it as a building block in formulating further concepts. For instance, the definite integral of a function f between the limits a and b can be approximated numerically using the formula
+[[../images/Books.SICP.org_20191028_234651.png]]
+
+or small values of dx. We can express this directly as a procedure:
+# 这个公式一会儿我再看看.
+
+#+begin_src emacs-lisp :session sicp :results output
+(define (integral f a b dx)
+  (define (add-dx x) (+ x dx))
+  (* (sum f (+ a (/ dx 2.0)) add-dx b)
+     dx))
+(integral cube 0 1 0.01)
+.24998750000000042
+(integral cube 0 1 0.001)
+.249999875000001
+#+end_src
+
+# 见识了新的视角
+#+begin_src ipython :session alinbx :results output
+sum([term(i) for i in range(a, b+1)])
+# 先要有基础
+#+end_src
+
+
+(The exact value of the integral of cube between 0 and 1 is 1/4.)
+ (The exact value of the integral of cube between 0 and 1 is 1/4.)
+
+Exercise 1.29.  Simpson's Rule is a more accurate method of numerical integration than the method illustrated above. Using Simpson's Rule, the integral of a function f between a and b is approximated as
+
+where h = (b - a)/n, for some even integer n, and yk = f(a + kh). (Increasing n increases the accuracy of the approximation.) Define a procedure that takes as arguments f, a, b, and n and returns the value of the integral, computed using Simpson's Rule. Use your procedure to integrate cube between 0 and 1 (with n = 100 and n = 1000), and compare the results to those of the integral procedure shown above.
+
+Exercise 1.30.  The sum procedure above generates a linear recursion. The procedure can be rewritten so that the sum is performed iteratively. Show how to do this by filling in the missing expressions in the following definition:
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(define (sum term a next b)
+  (define (iter a result)
+    (if <??>
+        <??>
+        (iter <??> <??>)))
+  (iter <??> <??>))
+#+end_src
+
+Exercise 1.31.
+a.  The sum procedure is only the simplest of a vast number of similar abstractions that can be captured as higher-order procedures.51 Write an analogous procedure called product that returns the product of the values of a function at points over a given range. Show how to define factorial in terms of product. Also use product to compute approximations to using the formula52
+
+b.  If your product procedure generates a recursive process, write one that generates an iterative process. If it generates an iterative process, write one that generates a recursive process.
+
+Exercise 1.32.  a. Show that sum and product (exercise 1.31) are both special cases of a still more general notion called accumulate that combines a collection of terms, using some general accumulation function:
+
+(accumulate combiner null-value term a next b)
+
+Accumulate takes as arguments the same term and range specifications as sum and product, together with a combiner procedure (of two arguments) that specifies how the current term is to be combined with the accumulation of the preceding terms and a null-value that specifies what base value to use when the terms run out. Write accumulate and show how sum and product can both be defined as simple calls to accumulate.
+
+b. If your accumulate procedure generates a recursive process, write one that generates an iterative process. If it generates an iterative process, write one that generates a recursive process.
+
+Exercise 1.33.  You can obtain an even more general version of accumulate (exercise 1.32) by introducing the notion of a filter on the terms to be combined. That is, combine only those terms derived from values in the range that satisfy a specified condition. The resulting filtered-accumulate abstraction takes the same arguments as accumulate, together with an additional predicate of one argument that specifies the filter. Write filtered-accumulate as a procedure. Show how to express the following using filtered-accumulate:
+
+a. the sum of the squares of the prime numbers in the interval a to b (assuming that you have a prime? predicate already written)
+
+b. the product of all the positive integers less than n that are relatively prime to n (i.e., all positive integers i < n such that GCD(i,n) = 1).
+
+[fn:pi]
+This series, usually written in the equivalent form (/4) = 1 - (1/3) + (1/5) - (1/7) + ···, is due to Leibniz. We'll see how to use this as the basis for some fancy numerical tricks in section 3.5.3.
+
+** 1.3.2 Constructing Procedures Using Lambda
+
+In using sum as in section 1.3.1, it seems terribly awkward to have to define trivial procedures such as pi-term and pi-next just so we can use them as arguments to our higher-order procedure. Rather than define pi-next and pi-term, it would be more convenient to have a way to directly specify ``the procedure that returns its input incremented by 4'' and ``the procedure that returns the reciprocal of its input times its input plus 2.'' We can do this by introducing the special form lambda, which creates procedures. Using lambda we can describe what we want as
+
+: (lambda (x) (+ x 4))
+
+and
+
+: (lambda (x) (/ 1.0 (* x (+ x 2))))
+
+Then our pi-sum procedure can be expressed without defining any auxiliary procedures as
+
+#+BEGIN_SRC scheme :results value
+(define (sum term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+(define (pi-sum a b)
+  (sum (lambda (x) (/ 1.0 (* x (+ x 2))))
+       a
+       (lambda (x) (+ x 4))
+       b))
+(pi-sum 1 11)
+#+END_SRC
+
+#+RESULTS:
+: 0.372005772005772
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(defun sum(term a next b)
+  (if (> a b)
+      0
+      (+ (term a)
+         (sum term (next a) next b))))
+
+(defun pi-sum(a b)
+  (sum (lambda (x) (/ 1.0 (* x (+ x 2))))
+       a
+       (lambda (x) (+ x 4))
+       b))
+(pi-sum 2 11)
+#+end_src
+
+#+RESULTS:
+: pi-sum
+
+Again using lambda, we can write the integral procedure without having to define the auxiliary procedure add-dx:
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(define (integral f a b dx)
+  (* (sum f
+          (+ a (/ dx 2.0))
+          (lambda (x) (+ x dx))
+          b)
+     dx))
+#+end_src
+
+In general, lambda is used to create procedures in the same way as define, except that no name is specified for the procedure:
+
+: (lambda (<formal-parameters>) <body>)
+
+The resulting procedure is just as much a procedure as one that is created using define. The only difference is that it has not been associated with any name in the environment. In fact,
+
+: (define (plus4 x) (+ x 4))
+
+is equivalent to
+
+: (define plus4 (lambda (x) (+ x 4)))
+
+We can read a lambda expression as follows:
+
+[[../images/Books.SICP.org_20191029_000007.png]]
+
+Like any expression that has a procedure as its value, a lambda expression can be used as the operator in a combination such as
+
+: ((lambda (x y z) (+ x y (square z))) 1 2 3)
+12
+# 这是最有意思的一点,
+
+or, more generally, in any context where we would normally use a procedure name.
+
+*** Using let to create local variables
+
+Another use of lambda is in creating local variables. We often need local variables in our procedures other than those that have been bound as formal parameters. For example, suppose we wish to compute the function
+[[../images/Books.SICP.org_20191029_000434.png]]
+
+which we could also express as
+[[../images/Books.SICP.org_20191029_000441.png]]
+
+In writing a procedure to compute f, we would like to include as local variables not only x and y but also the names of intermediate quantities like a and b. One way to accomplish this is to use an auxiliary procedure to bind the local variables:
+
+#+BEGIN_SRC scheme
+(define (f x y)
+  (define (f-helper a b)
+    (+ (* x (square a))
+       (* y b)
+       (* a b)))
+  (f-helper (+ 1 (* x y))
+            (- 1 y)))
+(f 1 2)
+#+END_SRC
+
+#+RESULTS:
+
+#+begin_src emacs-lisp :session sicp :lexical t
+
+#+end_src
+
+Of course, we could use a lambda expression to specify an anonymous procedure for binding our local variables. The body of f then becomes a single call to that procedure:
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(define (f x y)
+  ((lambda (a b)
+     (+ (* x (square a))
+        (* y b)
+        (* a b)))
+   (+ 1 (* x y))
+   (- 1 y)))
+#+end_src
+
+This construct is so useful that there is a special form called let to make its use more convenient. Using let, the f procedure could be written as
+# 突然明白, 使用let乃是更好的实现折叠.
+
+#+begin_src elisp :session alinbx :results output
+(define (f x y)
+  (let ((a (+ 1 (* x y)))
+        (b (- 1 y)))
+    (+ (* x (square a))
+       (* y b)
+       (* a b))))
+#+end_src
+
+The general form of a let expression is
+
+(let ((<var1> <exp1>)
+      (<var2> <exp2>)
+
+      (<varn> <expn>))
+   <body>)
+
+which can be thought of as saying
+
+: let 	<var1> have the value <exp1> and
+:     	<var2> have the value <exp2> and
+:    	<varn> have the value <expn>
+: in 	<body>
+
+The first part of the let expression is a list of name-expression pairs. When the let is evaluated, each name is associated with the value of the corresponding expression. The body of the let is evaluated with these names bound as local variables. The way this happens is that the let expression is interpreted as an alternate syntax for
+
+((lambda (<var1> ...<varn>)
+    <body>)
+ <exp1>
+
+ <expn>)
+
+No new mechanism is required in the interpreter in order to provide local variables. A let expression is simply syntactic sugar for the underlying lambda application.
+
+We can see from this equivalence that the scope of a variable specified by a let expression is the body of the let. This implies that:
+
+    Let allows one to bind variables as locally as possible to where they are to be used. For example, if the value of x is 5, the value of the expression
+
+    #+BEGIN_SRC scheme
+    (+ (let ((x 3))
+         (+ x (* x 10)))
+       x)
+    #+END_SRC
+
+    #+RESULTS:
+
+    is 38. Here, the x in the body of the let is 3, so the value of the let expression is 33. On the other hand, the x that is the second argument to the outermost + is still 5.
+
+    The variables' values are computed outside the let. This matters when the expressions that provide the values for the local variables depend upon variables having the same names as the local variables themselves. For example, if the value of x is 2, the expression
+
+    (let ((x 3)
+          (y (+ x 2)))
+      (* x y))
+
+    will have the value 12 because, inside the body of the let, x will be 3 and y will be 4 (which is the outer x plus 2).
+
+Sometimes we can use internal definitions to get the same effect as with let. For example, we could have defined the procedure f above as
+
+(define (f x y)
+  (define a (+ 1 (* x y)))
+  (define b (- 1 y))
+  (+ (* x (square a))
+     (* y b)
+     (* a b)))
+
+We prefer, however, to use let in situations like this and to use internal define only for internal procedures.54
+
+Exercise 1.34.  Suppose we define the procedure
+
+(define (f g)
+  (g 2))
+
+Then we have
+
+(f square)
+4
+
+(f (lambda (z) (* z (+ z 1))))
+6
+
+What happens if we (perversely) ask the interpreter to evaluate the combination (f f)? Explain.
+
+** 1.3.3 Procedures as General Methods
+# 此处为学到的重要技巧, 用function总结.
+We introduced{#三次跃迁, independent#}
+1) compound procedures in section [[1.1.4 Compound Procedures][1.1.4]] as a mechanism for abstracting patterns of numerical operations so as to make them independent of the particular numbers involved.
+2) With higher-order procedures, such as the integral procedure of section [[1.3.1 Procedures as Arguments][1.3.1]], we began to see a more powerful kind of abstraction: procedures used to express general methods of computation, independent of the particular functions involved.
+3) In this section we discuss two more elaborate examples -- general methods for finding zeros and fixed points of functions -- and show how these methods can be expressed directly as procedures.
+# 两处的independant用得好.
+# general最后抽象到arguments中. 但是python是视觉抽象.
+# 比如let就是Procedure abstraction.
+# 我用微信最初在群里聊天的时候就有过"灵光乍现", 可以用funcition总结, 那时候我说, 不管给我什么函数, 知道几个参数当场就开始写, 其实就是在用function做abstract.
+
+*** Finding roots of equations by the half-interval method
+
+The half-interval method is a simple but powerful technique for finding roots of an equation f(x) = 0, where f is a continuous function. The idea is that, if we are given points a and b such that f(a) < 0 < f(b), then f must have at least one zero between a and b. To locate a zero, let x be the average of a and b and compute f(x). If f(x) > 0, then f must have a zero between a and x. If f(x) < 0, then f must have a zero between x and b. Continuing in this way, we can identify smaller and smaller intervals on which f must have a zero. When we reach a point where the interval is small enough, the process stops. Since the interval of uncertainty is reduced by half at each step of the process, the number of steps required grows as (log( L/T)), where L is the length of the original interval and T is the error tolerance (that is, the size of the interval we will consider ``small enough''). Here is a procedure that implements this strategy:
+
+#+begin_src emacs-lisp :tangle yes
+(define (search f neg-point pos-point)
+  (let ((midpoint (average neg-point pos-point)))
+    (if (close-enough? neg-point pos-point)
+        midpoint
+        (let ((test-value (f midpoint)))
+          (cond ((positive? test-value)
+                 (search f neg-point midpoint))
+                ((negative? test-value)
+                 (search f midpoint pos-point))
+                (else midpoint))))))
+#+end_src
+
+We assume that we are initially given the function f together with points at which its values are negative and positive. We first compute the midpoint of the two given points. Next we check to see if the given interval is small enough, and if so we simply return the midpoint as our answer. Otherwise, we compute as a test value the value of f at the midpoint. If the test value is positive, then we continue the process with a new interval running from the original negative point to the midpoint. If the test value is negative, we continue with the interval from the midpoint to the positive point. Finally, there is the possibility that the test value is 0, in which case the midpoint is itself the root we are searching for.
+
+To test whether the endpoints are ``close enough'' we can use a procedure similar to the one used in section 1.1.7 for computing square roots:55
+
+#+begin_src emacs-lisp :tangle yes
+(define (close-enough? x y)
+  (< (abs (- x y)) 0.001))
+#+end_src
+
+Search is awkward to use directly, because we can accidentally give it points at which f's values do not have the required sign, in which case we get a wrong answer. Instead we will use search via the following procedure, which checks to see which of the endpoints has a negative function value and which has a positive value, and calls the search procedure accordingly. If the function has the same sign on the two given points, the half-interval method cannot be used, in which case the procedure signals an error.56
+
+#+begin_src emacs-lisp :tangle yes
+(define (half-interval-method f a b)
+  (let ((a-value (f a))
+        (b-value (f b)))
+    (cond ((and (negative? a-value) (positive? b-value))
+           (search f a b))
+          ((and (negative? b-value) (positive? a-value))
+           (search f b a))
+          (else
+           (error "Values are not of opposite sign" a b)))))
+#+end_src
+
+The following example uses the half-interval method to approximate as the root between 2 and 4 of sin x = 0:
+
+(half-interval-method sin 2.0 4.0)
+3.14111328125
+
+Here is another example, using the half-interval method to search for a root of the equation x3 - 2x - 3 = 0 between 1 and 2:
+
+(half-interval-method (lambda (x) (- (* x x x) (* 2 x) 3))
+                      1.0
+                      2.0)
+1.89306640625
+
+** 1.3.4 Procedures as Returned Values
+# 此处打住等回头再看
+
+The above examples demonstrate how the ability to pass procedures as arguments significantly enhances the =expressive power= of our programming language. We can achieve even more expressive power by creating procedures whose returned values are themselves procedures.
+# expressive power正是我要获取的power.所谓视觉化就是如此.
+We can illustrate this idea by looking again at the fixed-point example described at the end of section 1.3.3. We formulated a new version of the square-root procedure as a fixed-point search, starting with the observation that x is a fixed-point of the function y x/y. Then we used average =damping= to make the approximations converge. ~Average damping is a useful general technique in itself.~ Namely, given a function f, we consider the function whose value at x is equal to the average of x and f(x).
+# damping(wet)来形容　x/y甚好．
+We can express the idea of average damping by means of the following procedure:
+
+
+#+BEGIN_SRC scheme
+(define (average-damp f)
+  (lambda (x) (average x (f x))))
+(define (average x y)
+  (/ (+ x y) 2))
+(define (square x)
+  (* x x))
+((average-damp square) 10)
+#+END_SRC
+
+#+RESULTS:
+: 55
+
+
+#+begin_src emacs-lisp :session sicp :lexical t
+(defun average-damp(f)
+  (lambda (x) (average x (funcall f x))))
+
+(defun average (x y)
+  ;; Keep the float
+  (/ (+ x y) 2.0))
+
+(defun square (x)
+  (* x x))
+
+(funcall (average-damp #'square) 10)
+;; 此处在python中需要wrap, lambda就是一层wrapper
+;; yes,here return argument.
+;; 额外需要一个参数.
+;; lambda是定义过程.
+#+end_src
+
+#+RESULTS:
+: 55.0
+
+
+
+~Average-damp~ is a procedure that takes as its argument a procedure f and returns as its value a procedure (produced by the lambda) that, when applied to a number x, produces the average of x and (f x). For example, applying average-damp to the square procedure produces a procedure whose value at some number x is the average of x and x2. Applying this resulting procedure to 10 returns the average of 10 and 100, or 55:[fn:59]
+# average-damp概念单独拎出来.
+#+begin_src emacs-lisp :session sicp
+(defun square(x)
+  (* x x))
+((average-damp square) 10)
+;;functions的叠加.
+#+end_src
+
+55
+
+Using average-damp, we can reformulate the square-root procedure as follows:
+
+(define (sqrt x)
+  (fixed-point (average-damp (lambda (y) (/ x y)))
+               1.0))
+
+Notice how this formulation makes explicit the three ideas in the method: fixed-point search, average damping, and the function y x/y. It is instructive to compare this formulation of the square-root method with the original version given in section 1.1.7. Bear in mind that these procedures express the same process, and notice how much clearer the idea becomes when we express the process in terms of these abstractions. In general, there are many ways to formulate a process as a procedure. Experienced programmers know how to choose procedural formulations that are particularly perspicuous, and where useful elements of the process are exposed as separate entities that can be reused in other applications. As a simple example of reuse, notice that the cube root of x is a fixed point of the function y x/y2, so we can immediately generalize our square-root procedure to one that extracts cube roots:60
+
+(define (cube-root x)
+  (fixed-point (average-damp (lambda (y) (/ x (square y))))
+               1.0))
+
+Newton's method
+
+When we first introduced the square-root procedure, in section 1.1.7, we mentioned that this was a special case of Newton's method. If x g(x) is a differentiable function, then a solution of the equation g(x) = 0 is a fixed point of the function x f(x) where
+
+and Dg(x) is the derivative of g evaluated at x. Newton's method is the use of the fixed-point method we saw above to approximate a solution of the equation by finding a fixed point of the function f.61 For many functions g and for sufficiently good initial guesses for x, Newton's method converges very rapidly to a solution of g(x) = 0.62
+
+In order to implement Newton's method as a procedure, we must first express the idea of derivative. Note that ``derivative,'' like average damping, is something that transforms a function into another function. For instance, the derivative of the function x x3 is the function x 3x2. In general, if g is a function and dx is a small number, then the derivative Dg of g is the function whose value at any number x is given (in the limit of small dx) by
+
+Thus, we can express the idea of derivative (taking dx to be, say, 0.00001) as the procedure
+
+(define (deriv g)
+  (lambda (x)
+    (/ (- (g (+ x dx)) (g x))
+       dx)))
+
+along with the definition
+
+(define dx 0.00001)
+
+Like average-damp, deriv is a procedure that takes a procedure as argument and returns a procedure as value. For example, to approximate the derivative of x x3 at 5 (whose exact value is 75) we can evaluate
+
+(define (cube x) (* x x x))
+((deriv cube) 5)
+75.00014999664018
+
+With the aid of deriv, we can express Newton's method as a fixed-point process:
+
+(define (newton-transform g)
+  (lambda (x)
+    (- x (/ (g x) ((deriv g) x)))))
+(define (newtons-method g guess)
+  (fixed-point (newton-transform g) guess))
+
+The newton-transform procedure expresses the formula at the beginning of this section, and newtons-method is readily defined in terms of this. It takes as arguments a procedure that computes the function for which we want to find a zero, together with an initial guess. For instance, to find the square root of x, we can use Newton's method to find a zero of the function y y2 - x starting with an initial guess of 1.63 This provides yet another form of the square-root procedure:
+
+(define (sqrt x)
+  (newtons-method (lambda (y) (- (square y) x))
+                  1.0))
+
+Abstractions and first-class procedures
+
+We've seen two ways to express the square-root computation as an instance of a more general method, once as a fixed-point search and once using Newton's method. Since Newton's method was itself expressed as a fixed-point process, we actually saw two ways to compute square roots as fixed points. Each method begins with a function and finds a fixed point of some transformation of the function. We can express this general idea itself as a procedure:
+
+(define (fixed-point-of-transform g transform guess)
+  (fixed-point (transform g) guess))
+
+This very general procedure takes as its arguments a procedure g that computes some function, a procedure that transforms g, and an initial guess. The returned result is a fixed point of the transformed function.
+
+Using this abstraction, we can recast the first square-root computation from this section (where we look for a fixed point of the average-damped version of y x/y) as an instance of this general method:
+
+(define (sqrt x)
+  (fixed-point-of-transform (lambda (y) (/ x y))
+                            average-damp
+                            1.0))
+
+Similarly, we can express the second square-root computation from this section (an instance of Newton's method that finds a fixed point of the Newton transform of y y2 - x) as
+
+(define (sqrt x)
+  (fixed-point-of-transform (lambda (y) (- (square y) x))
+                            newton-transform
+                            1.0))
+
+We began section 1.3 with the observation that compound procedures are a crucial abstraction mechanism, because they permit us to express general methods of computing as explicit elements in our programming language. Now we've seen how higher-order procedures permit us to manipulate these general methods to create further abstractions.
+
+As programmers, we should be alert to opportunities to identify the underlying abstractions in our programs and to build upon them and generalize them to create more powerful abstractions. This is not to say that one should always write programs in the most abstract way possible; expert programmers know how to choose the level of abstraction appropriate to their task. But it is important to be able to think in terms of these abstractions, so that we can be ready to apply them in new contexts. The significance of higher-order procedures is that they enable us to represent these abstractions explicitly as elements in our programming language, so that they can be handled just like other computational elements.
+
+In general, programming languages impose restrictions on the ways in which computational elements can be manipulated. Elements with the fewest restrictions are said to have first-class status. Some of the ``rights and privileges'' of first-class elements are:64
+
+    They may be named by variables.
+    They may be passed as arguments to procedures.
+    They may be returned as the results of procedures.
+    They may be included in data structures.65
+# footnote需要加章节
+
+Lisp, unlike other common programming languages, awards procedures full first-class status. This poses challenges for efficient implementation, but the resulting gain in expressive power is enormous.66
+
+Exercise 1.40.  Define a procedure cubic that can be used together with the newtons-method procedure in expressions of the form
+
+(newtons-method (cubic a b c) 1)
+
+to approximate zeros of the cubic x3 + ax2 + bx + c.
+
+Exercise 1.41.  Define a procedure double that takes a procedure of one argument as argument and returns a procedure that applies the original procedure twice. For example, if inc is a procedure that adds 1 to its argument, then (double inc) should be a procedure that adds 2. What value is returned by
+
+: (((double (double double)) inc) 5)
+
+Exercise 1.42.  Let f and g be two one-argument functions. The composition f after g is defined to be the function x f(g(x)). Define a procedure compose that implements composition. For example, if inc is a procedure that adds 1 to its argument,
+
+((compose square inc) 6)
+49
+
+Exercise 1.43.  If f is a numerical function and n is a positive integer, then we can form the nth repeated application of f, which is defined to be the function whose value at x is f(f(...(f(x))...)). For example, if f is the function x x + 1, then the nth repeated application of f is the function x x + n. If f is the operation of squaring a number, then the nth repeated application of f is the function that raises its argument to the 2nth power. Write a procedure that takes as inputs a procedure that computes f and a positive integer n and returns the procedure that computes the nth repeated application of f. Your procedure should be able to be used as follows:
+
+((repeated square 2) 5)
+625
+
+Hint: You may find it convenient to use compose from exercise 1.42.
+
+Exercise 1.44.  The idea of smoothing a function is an important concept in signal processing. If f is a function and dx is some small number, then the smoothed version of f is the function whose value at a point x is the average of f(x - dx), f(x), and f(x + dx). Write a procedure smooth that takes as input a procedure that computes f and returns a procedure that computes the smoothed f. It is sometimes valuable to repeatedly smooth a function (that is, smooth the smoothed function, and so on) to obtained the n-fold smoothed function. Show how to generate the n-fold smoothed function of any given function using smooth and repeated from exercise 1.43.
+
+Exercise 1.45.  We saw in section 1.3.3 that attempting to compute square roots by naively finding a fixed point of y x/y does not converge, and that this can be fixed by average damping. The same method works for finding cube roots as fixed points of the average-damped y x/y2. Unfortunately, the process does not work for fourth roots -- a single average damp is not enough to make a fixed-point search for y x/y3 converge. On the other hand, if we average damp twice (i.e., use the average damp of the average damp of y x/y3) the fixed-point search does converge. Do some experiments to determine how many average damps are required to compute nth roots as a fixed-point search based upon repeated average damping of y x/yn-1. Use this to implement a simple procedure for computing nth roots using fixed-point, average-damp, and the repeated procedure of exercise 1.43. Assume that any arithmetic operations you need are available as primitives.
+
+Exercise 1.46.  Several of the numerical methods described in this chapter are instances of an extremely general computational strategy known as iterative improvement. Iterative improvement says that, to compute something, we start with an initial guess for the answer, test if the guess is good enough, and otherwise improve the guess and continue the process using the improved guess as the new guess. Write a procedure iterative-improve that takes two procedures as arguments: a method for telling whether a guess is good enough and a method for improving a guess. Iterative-improve should return as its value a procedure that takes a guess as argument and keeps improving the guess until it is good enough. Rewrite the sqrt procedure of section 1.1.7 and the fixed-point procedure of section 1.3.3 in terms of iterative-improve.
+
+[fn:59]
+Observe that this is a combination whose operator is itself a combination. Exercise 1.4 already demonstrated the ability to form such combinations, but that was only a toy example. Here we begin to see the real need for such combinations -- when applying a procedure that is obtained as the value returned by a higher-order procedure.
+
+
+
