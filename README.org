@@ -1,0 +1,64 @@
+The acts of the mind, wherein it exerts its power over simple ideas, are chiefly these three:
+
+1. Combining several simple ideas into one compound one, *and thus* all complex ideas are made.
+2. The second is bringing two ideas, whether simple or complex, together, and setting them by one another so as to take a view of them =at once=, without uniting them into one, by which it gets all its ideas of relations.
+   # 此处只说了两个, recursive
+3. The third is separating them from all other ideas that accompany them in their real existence:
+#
+This is called abstraction, and thus all its general ideas are made.
+
+- John Locke, An Essay Concerning Human Understanding (1690)
+三个部分: Combine, Relate, Separate
+Combine, exert, compound, complex
+Relate(sort), bring together, at once, unit, relations
+Separate them from all other ideas
+and thus取代So, the second is
+
+鱼骨图的基本原理, 结构与可视化.
+并列关系,
+
+We are about to study the idea of a computational process. Computational processes are abstract beings that inhabit computers. As they evolve, processes manipulate other abstract things called data. The evolution of a process is directed by a pattern of rules called a program. People create programs to direct processes. In effect, we =conjure= the spirits of the computer with our spells.
+#+BEGIN_QUOTE
+Conjure /ˈkʌn.dʒɚ/ *召唤(念咒召唤)*,
+- Define:
+  to make (something) appear or seem to appear by using magic
+- Origin:
+  Middle English (also in the sense ‘oblige by oath’): from Old French conjurer ‘to plot or exorcize’, from Latin conjurare ‘band together by an oath, conspire’ (in medieval Latin ‘invoke’), from con- ‘together’ + jurare ‘swear’
+- 助记:
+  Conjure = invoke, con+oath, 咒语聚合起来.
+  We spell to conjure the spirit of computer.
+#+END_QUOTE
+A computational process is indeed much like a sorcerer's idea of a spirit{具象化}[fn:1].It cannot be seen or touched. It is not composed of matter at all.
+However, it is very real. It can perform intellectual work. It can answer questions. It can affect the world by disbursing money at a bank or by controlling a robot arm in a factory.
+The programs we use to conjure ~processes~ are like a sorcerer's spells.
+# So the spirit of computexr mentioned above is indeed "process"
+They are carefully composed from symbolic expressions in =arcane= and =esoteric= programming languages that *prescribe* the tasks we want our processes to perform.
+# prescribe, 妙, 程序便是预先写好的.
+#+BEGIN_QUOTE
+Arcane ɑːrˈkeɪn/  secret or mysterious.
+- Etymology:
+  from Latin arcanus, from arcere ‘to shut up’, from arca ‘chest’.
+  from arca "chest, box, place for safe-keeping," from PIE root *ark- "to hold, contain, guard",
+  ark=chest or box这一点讲得通, 因为ark是方舟,
+  Arcane就是将东西放进盒子里藏起来. 比如约柜.
+Esoteric /ˌes.əˈter.ɪk/ 内行才懂的
+- Define:
+  very unusual and understood or liked by only a small number of people, especially those with special knowledge:
+- Etymology:
+  1650s, from Greek esoterikos "belonging to an inner circle" (Lucian), from esotero "more within," comparative adverb of eso "within," from PIE *ens-o-, suffixed form of *ens, extended form of root *en "in." Classically applied to certain popular and non-technical writings of Aristotle, later to doctrines of Pythagoras. In English, first of Pythagorean doctrines.
+- 助记
+  e容易误解为ex,但却是相反的含义eso"within",root是en
+  只能生生记住."more within," "belonging to an inner circle"
+#+END_QUOTE
+
+A computational process, in a correctly working computer, executes programs precisely and accurately.
+Thus, like the sorcerer's apprentice, novice programmers must learn to understand and to *anticipate* the consequences of their conjuring.
+# 做两点:understand and anticipate,就是要与spirit沟通, 预测起行为.
+Even small errors (usually called bugs or glitches) in programs can have complex and unanticipated consequences.
+
+Fortunately, learning to program is considerably less dangerous than learning sorcery, because the spirits we deal with are conveniently contained in a secure way. Real-world programming, however, requires care, expertise, and wisdom. A small bug in a computer-aided design program, for example, can lead to the =catastrophic= collapse of an airplane or a dam or the self-destruction of an industrial robot.
+
+Master software engineers have the ability to organize programs so that they can be reasonably sure that the resulting processes will perform the tasks intended.
+They can ~visualize~ the behavior of their systems in advance.
+# visualize贯穿始终, 接下来的问题就是, 如何visualize?
+They know how to structure programs so that unanticipated problems do not lead to catastrophic consequences, and when problems do arise, they can debug their programs. Well-designed computational systems, like well-designed automobiles or nuclear reactors, are designed in a modular manner, so that the parts can be constructed, replaced, and debugged separately.
